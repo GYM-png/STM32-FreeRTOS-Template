@@ -10,27 +10,14 @@
     "files": [],
     "folders": [
       {
+        "name": "::CMSIS",
+        "files": [],
+        "folders": []
+      },
+      {
         "name": "Application",
         "files": [],
         "folders": [
-          {
-            "name": "Cmd",
-            "files": [
-              {
-                "path": "../UserCode/Cmd/cmd.c"
-              }
-            ],
-            "folders": []
-          },
-          {
-            "name": "Global",
-            "files": [
-              {
-                "path": "../UserCode/global/global.c"
-              }
-            ],
-            "folders": []
-          },
           {
             "name": "MDK-ARM",
             "files": [
@@ -54,7 +41,13 @@
                     "path": "../Core/Src/gpio.c"
                   },
                   {
+                    "path": "../Core/Src/dma.c"
+                  },
+                  {
                     "path": "../Core/Src/rtc.c"
+                  },
+                  {
+                    "path": "../Core/Src/usart.c"
                   },
                   {
                     "path": "../Core/Src/stm32h7xx_it.c"
@@ -98,6 +91,15 @@
             ]
           }
         ]
+      },
+      {
+        "name": "Cmd",
+        "files": [
+          {
+            "path": "../UserCode/Cmd/cmd.c"
+          }
+        ],
+        "folders": []
       },
       {
         "name": "Drivers",
@@ -174,6 +176,12 @@
               },
               {
                 "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c"
+              },
+              {
+                "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c"
+              },
+              {
+                "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c"
               }
             ],
             "folders": []
@@ -188,6 +196,15 @@
             "folders": []
           }
         ]
+      },
+      {
+        "name": "Global",
+        "files": [
+          {
+            "path": "../UserCode/global/global.c"
+          }
+        ],
+        "folders": []
       },
       {
         "name": "Middlewares",
@@ -212,6 +229,15 @@
             "folders": []
           }
         ]
+      },
+      {
+        "name": "Usart",
+        "files": [
+          {
+            "path": "../UserCode/Usart/myusart.c"
+          }
+        ],
+        "folders": []
       }
     ]
   },
@@ -219,7 +245,7 @@
   "deviceName": null,
   "packDir": ".pack/Keil/STM32H7xx_DFP.3.1.1",
   "miscInfo": {
-    "uid": "41e17a9026dd6591fd918833396809e3"
+    "uid": "5788c60bb51b67cdf2f442c3d83d0cfe"
   },
   "targets": {
     "CmdDebug": {
@@ -228,16 +254,56 @@
       "compileConfig": {
         "cpuType": "Cortex-M7",
         "floatingPointHardware": "double",
+        "scatterFilePath": "",
         "useCustomScatterFile": false,
-        "scatterFilePath": "<YOUR_SCATTER_FILE>.sct",
         "storageLayout": {
           "RAM": [
+            {
+              "tag": "RAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
             {
               "tag": "IRAM",
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x5000"
+                "size": "0x20000"
+              },
+              "isChecked": true,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x24000000",
+                "size": "0x50000"
               },
               "isChecked": true,
               "noInit": false
@@ -245,14 +311,54 @@
           ],
           "ROM": [
             {
+              "tag": "ROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
               "tag": "IROM",
               "id": 1,
               "mem": {
-                "startAddr": "0x08000000",
-                "size": "0x10000"
+                "startAddr": "0x8000000",
+                "size": "0x100000"
               },
               "isChecked": true,
               "isStartup": true
+            },
+            {
+              "tag": "IROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
             }
           ]
         },
@@ -290,11 +396,12 @@
           "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc",
           "../Drivers/CMSIS/Device/ST/STM32H7xx/Include",
           "../Drivers/CMSIS/Include",
+          "../UserCode/Cmd",
+          "../UserCode/global",
+          "../UserCode/Usart",
           ".cmsis/include",
           "../MDK-ARM/RTE/_CmdDebug",
-          ".eide/deps",
-          "../UserCode/Cmd",
-          "../UserCode/global"
+          ".eide/deps"
         ],
         "libList": [],
         "sourceDirList": [],
