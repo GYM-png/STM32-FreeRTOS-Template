@@ -17,8 +17,8 @@
 
 
 
-extern RTC_TimeTypeDef rtcTime;
-
+extern RTC_TimeTypeDef rtc_time;
+extern RTC_DateTypeDef rtc_date;
 
 
 #endif

@@ -2,7 +2,7 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-12 22:14:23
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-13 16:52:59
+ * @LastEditTime: 2024-10-13 17:46:38
  * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Cmd\cmd.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,6 +20,14 @@ int fputc(int ch, FILE *f)
 {
   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
   return ch;
+}
+
+int myprint(const char*__format, ...)
+{
+    HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
+    HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+    printf("\r\n[%2d:%2d:%2d]", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+    printf(__format);
 }
 
 /**
@@ -62,21 +70,15 @@ void find_cmd(char * cmd)
             return;
         }
     }
-    printf("\r\n命令错误，输入help查看命令\r\n");
+    myprint("命令错误，输入help查看命令\r\n");
 }
 
 static void debugPrintStart(void)
 {
-    // DebugPrintFunc("[]", 3);
-    // my_printf("123");
-    HAL_RTC_GetTime(&hrtc, &rtcTime, RTC_FORMAT_BCD);
+    HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
+    HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
 }
 
-static void debugPrintEnd(void)
-{
-    // DebugPrintFunc("\r\n", 3);
-    printf("\r\n");
-}
 
 /**
  * @brief 打印所有指令 help 指令对应的回调
@@ -84,7 +86,7 @@ static void debugPrintEnd(void)
  */
 static void print_cmd_list(void)
 {
-    printf("\r\n命令列表\r\n");
+    myprint("命令列表\r\n");
     for (uint16_t i = 1; i < cmd_count; i++)
     {
         printf("%s\r\n", cmd_list[i].cmd);
@@ -95,7 +97,7 @@ static void print_cmd_list(void)
 static void systemRest(void)
 {
     debugPrintStart();
-    printf("\r\n[%2d:%2d:%2d]系统正在复位\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
+    myprint("系统正在复位\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     HAL_NVIC_SystemReset();
     // debugPrintEnd();
 }
@@ -103,7 +105,7 @@ static void systemRest(void)
 static void systemVersion(void)
 {
     debugPrintStart();
-    printf("\r\n[%2d:%2d:%2d]系统版本1.0\r\n开始时间2024年10月13日\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
+    myprint("系统版本1.0\r\n开始时间2024年10月13日\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     // debugPrintEnd();
 }
 

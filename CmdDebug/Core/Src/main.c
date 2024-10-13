@@ -107,7 +107,7 @@ int main(void)
   uart_dma_init(&uart1, &huart1, &hdma_usart1_rx);
   cmd_init();
 
-  printf("\r\n系统启动\r\n");
+  myprint("系统启动\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
