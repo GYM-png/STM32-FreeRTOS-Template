@@ -18,7 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "rtc.h"
+#include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
@@ -26,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
 #include "cmd.h"
+#include "myusart.h"
 #include <stdio.h>
 /* USER CODE END Includes */
 
@@ -49,6 +52,9 @@
 /* USER CODE BEGIN PV */
 uint8_t data[20];
 uint32_t time = 0;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+
+uart_dma_t uart1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,22 +103,27 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USB_DEVICE_Init();
+  MX_DMA_Init();
   MX_RTC_Init();
+  MX_USART1_UART_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  uart_dma_init(&uart1, &huart1, &hdma_usart1_rx);
   cmdInit();
-  HAL_Delay(5000);
-  my_printf("系统启动\r\n");
+  printf("\r\n系统启动\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // time++;
-    // sprintf(data, "Time: %d\r\n", time);
-    // CDC_Transmit_HS(data, 20);
-    // HAL_Delay(1000);
+    if(uart1.rx_flag == 1)
+    {
+      uart1.rx_flag = 0;
+      findCommand((char*)uart1.rx_buffer);
+      // printf("接收到数据：%s\r\n", uart1.rx_buffer);
+      // my_printf("接收到数据：%s\r\n", uart1.rx_buffer);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

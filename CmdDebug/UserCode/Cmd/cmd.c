@@ -2,18 +2,26 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-12 22:14:23
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-13 00:57:34
+ * @LastEditTime: 2024-10-13 15:23:37
  * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Cmd\cmd.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "cmd.h"
 #include "string.h"
 #include "usbd_cdc_if.h"
+#include "myusart.h"
 #include <stdio.h>
 #include "global.h"
 
 #include <stdarg.h>  // 包含 va_list、va_start、va_arg、va_end 等宏定义
 #include <string.h>
+
+int fputc(int ch, FILE *f)
+{
+  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
+  return ch;
+}
+
 
 // 辅助函数：整数转换为字符串，支持指定最小宽度和填充
 void int_to_str(int num, char *str, int width, char pad) {
@@ -144,20 +152,22 @@ void my_printf(const char *format, ...) {
     va_end(args);
 
     // HAL_UART_Transmit(&huart2, (uint8_t*)buffer, strlen(buffer), HAL_MAX_DELAY);
-    CDC_Transmit_HS((uint8_t*)buffer, strlen(buffer));
+    // CDC_Transmit_HS((uint8_t*)buffer, strlen(buffer));
 }
 
 /**
  * @brief 命令列表索引
  */
-#define SYSTEM_R 0
-#define SYSTEM_V 1
-#define SYSTEM_T 2
+#define HELP     0
+#define SYSTEM_R 1
+#define SYSTEM_V 2
+#define SYSTEM_T 3
 
 /**
  * @brief 命令列表
  */
 static cmd_t cmdList[] = {
+    {HELP, "help", NULL},
     {SYSTEM_R, "system -r", NULL},
     {SYSTEM_V, "system -v", NULL},
     {SYSTEM_T, "system -t", NULL},
@@ -176,8 +186,8 @@ void findCommand(char * cmd)
             cmdList[i].func();
             return;
         }
-        
     }
+    printf("\r\n命令错误，输入help查看命令\r\n");
 }
 
 static void debugPrintStart(void)
@@ -190,13 +200,23 @@ static void debugPrintStart(void)
 static void debugPrintEnd(void)
 {
     // DebugPrintFunc("\r\n", 3);
-    my_printf("\r\n");
+    printf("\r\n");
 }
+
+static void print_cmd_list(void)
+{
+    printf("\r\n命令列表\r\n");
+    for (uint16_t i = 1; i < sizeof(cmdList)/sizeof(cmdList[0]); i++)
+    {
+        printf("%s\r\n", cmdList[i].cmd);
+    }
+}
+
 
 static void systemRest(void)
 {
     debugPrintStart();
-    my_printf("[%2d:%2d:%2d]系统正在复位\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
+    printf("\r\n[%2d:%2d:%2d]系统正在复位\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
     HAL_NVIC_SystemReset();
     // debugPrintEnd();
 }
@@ -204,7 +224,7 @@ static void systemRest(void)
 static void systemVersion(void)
 {
     debugPrintStart();
-    my_printf("[%2d:%2d:%2d]系统版本1.0\r\n开始时间2024年10月13日\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
+    printf("\r\n[%2d:%2d:%2d]系统版本1.0\r\n开始时间2024年10月13日\r\n", rtcTime.Hours, rtcTime.Minutes, rtcTime.Seconds);
     // debugPrintEnd();
 }
 
@@ -213,6 +233,7 @@ void cmdInit()
     // DebugPrintFunc = print;
 
     /* 命令对应函数的实现 */
+    cmdList[HELP].func = print_cmd_list;
     cmdList[SYSTEM_R].func = systemRest;
     cmdList[SYSTEM_V].func = systemVersion;
 }

@@ -269,8 +269,8 @@ static int8_t CDC_Receive_HS(uint8_t* Buf, uint32_t *Len)
   USBD_CDC_SetRxBuffer(&hUsbDeviceHS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceHS);
   /**≤‚ ‘**/
-  memcpy(cmdCopy, Buf, *Len);
-  findCommand(cmdCopy);
+  // memcpy(cmdCopy, Buf, *Len);
+  // findCommand(cmdCopy);
   /****/
   return (USBD_OK);
   /* USER CODE END 11 */
