@@ -35,25 +35,31 @@
                 "name": "Core",
                 "files": [
                   {
-                    "path": "../Core/Src/main.c"
+                    "path": "../Core/Src/dma.c"
+                  },
+                  {
+                    "path": "../Core/Src/freertos.c"
                   },
                   {
                     "path": "../Core/Src/gpio.c"
                   },
                   {
-                    "path": "../Core/Src/dma.c"
+                    "path": "../Core/Src/main.c"
                   },
                   {
                     "path": "../Core/Src/rtc.c"
                   },
                   {
-                    "path": "../Core/Src/usart.c"
+                    "path": "../Core/Src/stm32h7xx_hal_msp.c"
+                  },
+                  {
+                    "path": "../Core/Src/stm32h7xx_hal_timebase_tim.c"
                   },
                   {
                     "path": "../Core/Src/stm32h7xx_it.c"
                   },
                   {
-                    "path": "../Core/Src/stm32h7xx_hal_msp.c"
+                    "path": "../Core/Src/usart.c"
                   }
                 ],
                 "folders": []
@@ -96,6 +102,9 @@
         "name": "Cmd",
         "files": [
           {
+            "path": "../UserCode/Cmd/cmd_task.c"
+          },
+          {
             "path": "../UserCode/Cmd/cmd.c"
           }
         ],
@@ -105,6 +114,15 @@
         "name": "Drivers",
         "files": [],
         "folders": [
+          {
+            "name": "CMSIS",
+            "files": [
+              {
+                "path": "../Core/Src/system_stm32h7xx.c"
+              }
+            ],
+            "folders": []
+          },
           {
             "name": "STM32H7xx_HAL_Driver",
             "files": [
@@ -185,15 +203,6 @@
               }
             ],
             "folders": []
-          },
-          {
-            "name": "CMSIS",
-            "files": [
-              {
-                "path": "../Core/Src/system_stm32h7xx.c"
-              }
-            ],
-            "folders": []
           }
         ]
       },
@@ -227,6 +236,42 @@
               }
             ],
             "folders": []
+          },
+          {
+            "name": "FreeRTOS",
+            "files": [
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/croutine.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/list.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/queue.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/tasks.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/timers.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c"
+              },
+              {
+                "path": "../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c"
+              }
+            ],
+            "folders": []
           }
         ]
       },
@@ -235,6 +280,9 @@
         "files": [
           {
             "path": "../UserCode/Usart/myusart.c"
+          },
+          {
+            "path": "../UserCode/Usart/usart_task.c"
           }
         ],
         "folders": []
@@ -245,7 +293,7 @@
   "deviceName": null,
   "packDir": ".pack/Keil/STM32H7xx_DFP.3.1.1",
   "miscInfo": {
-    "uid": "5788c60bb51b67cdf2f442c3d83d0cfe"
+    "uid": "7365e9aea3f6a720871f1399ed2844b4"
   },
   "targets": {
     "CmdDebug": {
@@ -399,6 +447,9 @@
           "../UserCode/Cmd",
           "../UserCode/global",
           "../UserCode/Usart",
+          "../Middlewares/Third_Party/FreeRTOS/Source/include",
+          "../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS",
+          "../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F",
           ".cmsis/include",
           "../MDK-ARM/RTE/_CmdDebug",
           ".eide/deps"

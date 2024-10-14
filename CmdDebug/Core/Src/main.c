@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "dma.h"
 #include "rtc.h"
 #include "usart.h"
@@ -27,9 +28,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
-#include "cmd.h"
-#include "myusart.h"
-#include <stdio.h>
+#include "global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,13 +51,11 @@
 /* USER CODE BEGIN PV */
 uint8_t data[20];
 uint32_t time = 0;
-extern DMA_HandleTypeDef hdma_usart1_rx;
-
-uart_dma_t uart1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -102,23 +99,23 @@ int main(void)
   MX_DMA_Init();
   MX_RTC_Init();
   MX_USART1_UART_Init();
-  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  uart_dma_init(&uart1, &huart1, &hdma_usart1_rx);
-  cmd_init();
 
-  myprint("ÏµÍ³Æô¶¯\r\n");
   /* USER CODE END 2 */
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if(uart1.rx_flag == 1)
-    {
-      uart1.rx_flag = 0;
-      find_cmd((char*)uart1.rx_buffer);
-    }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -190,6 +187,29 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM17 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM17) {
+    systern_run_time++;
+    rtc_ms++;
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -2,7 +2,7 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-12 22:14:23
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-13 17:46:38
+ * @LastEditTime: 2024-10-14 23:02:13
  * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Cmd\cmd.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,17 +16,37 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef USE_FREERTOS
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+
+SemaphoreHandle_t debug_print_mutex = NULL;
+
+#endif
+
 int fputc(int ch, FILE *f)
 {
+#ifdef USE_FREERTOS
+
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
+#else
   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
+#endif
   return ch;
+}
+
+int myprint_with_time(const char*__format, ...)
+{
+    // HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
+    // HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+    printf("\r\n[%2d:%2d:%2d]", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+    printf(__format);
 }
 
 int myprint(const char*__format, ...)
 {
-    HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
-    HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
-    printf("\r\n[%2d:%2d:%2d]", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     printf(__format);
 }
 
@@ -94,20 +114,36 @@ static void print_cmd_list(void)
 }
 
 
-static void systemRest(void)
+static void system_rest(void)
 {
     debugPrintStart();
-    myprint("系统正在复位\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+    myprint_with_time("系统正在复位\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     HAL_NVIC_SystemReset();
     // debugPrintEnd();
 }
 
-static void systemVersion(void)
+static void system_print_version(void)
 {
     debugPrintStart();
     myprint("系统版本1.0\r\n开始时间2024年10月13日\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     // debugPrintEnd();
 }
+
+#ifdef USE_FREERTOS
+extern task_list_t system_task_list[15];
+extern uint8_t task_count;
+
+static void system_print_task(void)
+{
+    UBaseType_t StackHighWaterMark;
+    for (uint8_t i = 0; i < task_count; i++)
+    {
+        StackHighWaterMark = uxTaskGetStackHighWaterMark(system_task_list[i].handle);   
+        myprint_with_time("任务：%s\t任务剩余堆栈：%d\t任务堆栈使用率：%d%%\r\n", system_task_list[i].name, StackHighWaterMark, StackHighWaterMark * 100 / system_task_list[i].stack_size);
+    }
+    
+}
+#endif
 
 /**
  * @brief 命令初始化函数
@@ -127,12 +163,17 @@ uint8_t cmd_init(void)
     cmd_count++;
     
     cmd_list[SYSTEM_R].cmd = "system -r";
-    cmd_list[SYSTEM_R].callback = systemRest;
+    cmd_list[SYSTEM_R].callback = system_rest;
     cmd_count++;
 
     cmd_list[SYSTEM_V].cmd = "system -v";
-    cmd_list[SYSTEM_V].callback = systemVersion;
+    cmd_list[SYSTEM_V].callback = system_print_version;
     cmd_count++;
+#ifdef USE_FREERTOS
+    cmd_list[SYSTEM_T].cmd = "system -t";
+    cmd_list[SYSTEM_T].callback = system_print_task;
+    cmd_count++;
+#endif
     return OK;
 }
 
