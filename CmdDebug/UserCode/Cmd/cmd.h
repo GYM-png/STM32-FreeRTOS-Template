@@ -16,6 +16,8 @@
 //     void (*print)(const uint8_t * data, uint8_t len);
 // }print_t
 
+#define CMD_COUNT_MAX 30 //最大命令数量
+
 
 typedef struct
 {
@@ -24,9 +26,9 @@ typedef struct
     void (*callback)(void); //回调函数
 }cmd_t;
 
-typedef uint8_t (*debugPrint_f)(uint8_t * , uint16_t );
 
-void my_printf(const char *format, ...); 
+void myprintf(const char *format, ...); 
+void mylog(const char*__format, ...);
 
 uint8_t cmd_init(void);
 void find_cmd(char * cmd);
