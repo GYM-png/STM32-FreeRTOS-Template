@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "myusart.h": "c",
+        "global.h": "c",
+        "string.h": "c",
+        "cmd.h": "c",
+        "system.h": "c",
+        "stdarg.h": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "string": "c",
+        "limits": "c",
+        "utility": "c",
+        "usart_task.h": "c",
+        "cmd_task.h": "c"
+    }
+}

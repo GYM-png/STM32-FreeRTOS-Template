@@ -1,0 +1,32 @@
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil5\ARM\ARMCC\Bin'
+Build target 'CmdDebug'
+compiling global.c...
+..\UserCode\global\global.c(71): warning:  #77-D: this declaration has no storage class or type specifier
+  time.Seconds >= 60)
+..\UserCode\global\global.c(71): error:  #65: expected a ";"
+  time.Seconds >= 60)
+..\UserCode\global\global.c(82): warning:  #12-D: parsing restarts here after previous syntax error
+          HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(83): error:  #79: expected a type specifier
+          HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(83): error:  #79: expected a type specifier
+          HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(83): error:  #79: expected a type specifier
+          HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(83): warning:  #77-D: this declaration has no storage class or type specifier
+          HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(83): error:  #147: declaration is incompatible with "HAL_StatusTypeDef HAL_RTC_GetDate(RTC_HandleTypeDef *, RTC_DateTypeDef *, uint32_t)"  (declared at line 940 of "../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rtc.h")
+          HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+..\UserCode\global\global.c(84): error:  #79: expected a type specifier
+          vTaskDelay(50);
+..\UserCode\global\global.c(84): warning:  #77-D: this declaration has no storage class or type specifier
+          vTaskDelay(50);
+..\UserCode\global\global.c(84): error:  #147: declaration is incompatible with "void vTaskDelay(const TickType_t)"  (declared at line 758 of "../Middlewares/Third_Party/FreeRTOS/Source/include/task.h")
+          vTaskDelay(50);
+..\UserCode\global\global.c(85): error:  #169: expected a declaration
+      }
+..\UserCode\global\global.c(87): warning: At end of source:  #12-D: parsing restarts here after previous syntax error
+..\UserCode\global\global.c: 5 warnings, 8 errors
+"CmdDebug\CmdDebug.axf" - 8 Error(s), 5 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:04
