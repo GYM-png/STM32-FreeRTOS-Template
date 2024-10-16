@@ -2,7 +2,7 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-15 20:15:30
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-15 22:58:16
+ * @LastEditTime: 2024-10-16 22:11:10
  * @FilePath: \MDK-ARMd:\warehouse\CmdDebug\CmdDebug\UserCode\sys\system.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -72,8 +72,8 @@ BaseType_t myTaskCreate(TaskFunction_t pxTaskCode,
                         TaskHandle_t * const pxCreatedTask ) 
 {
     taskENTER_CRITICAL();
-    task_install(pcName, *pxCreatedTask, usStackDepth, uxPriority);
     BaseType_t re_value = xTaskCreate(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask);
+    task_install(pcName, *pxCreatedTask, usStackDepth, uxPriority);
     taskEXIT_CRITICAL();
     return re_value;
 }

@@ -43,7 +43,7 @@ cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h
 cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h
 cmddebug\global.o: ../Core/Inc/rtc.h
-cmddebug\global.o: ..\UserCode\sys\system.h
+cmddebug\global.o: ../UserCode/sys/system.h
 cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\global.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
@@ -59,3 +59,4 @@ cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 cmddebug\global.o: ../UserCode/Usart/usart_task.h
 cmddebug\global.o: ../UserCode/Cmd/cmd_task.h
+cmddebug\global.o: ../UserCode/Cmd/cmd.h

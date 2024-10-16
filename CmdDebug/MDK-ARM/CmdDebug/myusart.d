@@ -46,7 +46,7 @@ cmddebug\myusart.o: ../Core/Inc/usart.h
 cmddebug\myusart.o: ../Core/Inc/dma.h
 cmddebug\myusart.o: ../UserCode/global/global.h
 cmddebug\myusart.o: ../Core/Inc/rtc.h
-cmddebug\myusart.o: ..\UserCode\sys\system.h
+cmddebug\myusart.o: ../UserCode/sys/system.h
 cmddebug\myusart.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\myusart.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\myusart.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
@@ -61,4 +61,3 @@ cmddebug\myusart.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 cmddebug\myusart.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\myusart.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 cmddebug\myusart.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
-cmddebug\myusart.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h

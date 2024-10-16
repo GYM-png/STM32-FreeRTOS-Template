@@ -202,9 +202,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM17) {
-    systern_run_time++;
-    rtc_ms++;
     HAL_IncTick();
+	rtc_ms++;
   }
   /* USER CODE BEGIN Callback 1 */
 

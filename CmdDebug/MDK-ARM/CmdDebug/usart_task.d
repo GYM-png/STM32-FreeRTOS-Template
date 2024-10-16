@@ -47,7 +47,7 @@ cmddebug\usart_task.o: ../Core/Inc/usart.h
 cmddebug\usart_task.o: ../Core/Inc/dma.h
 cmddebug\usart_task.o: ../UserCode/global/global.h
 cmddebug\usart_task.o: ../Core/Inc/rtc.h
-cmddebug\usart_task.o: ..\UserCode\sys\system.h
+cmddebug\usart_task.o: ../UserCode/sys/system.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\usart_task.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h

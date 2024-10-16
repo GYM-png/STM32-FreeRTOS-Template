@@ -10,6 +10,7 @@
 #include "system.h"
 #include "usart_task.h"
 #include "cmd_task.h"
+#include "cmd.h"
 
 RTC_TimeTypeDef rtc_time;
 RTC_DateTypeDef rtc_date;
@@ -25,7 +26,7 @@ uint16_t rtc_ms = 0;//系统时间ms rtc只能提供精确到s
  * @defgroup start task相关参数
  */
 #define START_TASK_PRIO 3  //任务优先级
-#define START_TASK_SIZE 100 //任务堆栈大小
+#define START_TASK_SIZE 200 //任务堆栈大小
 TaskHandle_t START_TASK_Handler;//任务句柄
 void start_task(void *pvparameters);
 
@@ -35,6 +36,7 @@ void start_task(void *pvparameters);
 
 void start_task_init(void)
 {
+	cmd_init();
     myTaskCreate((TaskFunction_t )start_task,    //任务函数
                 (const char *   )"start_task",   //任务名称
                 (uint16_t       )START_TASK_SIZE, //任务堆栈大小
@@ -49,9 +51,9 @@ static void start_task(void * pvparameters)
     /*获取系统初始时间*/
     HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
     HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
-    usart_task_init();
-    cmd_task_init();
-
+	mylog("系统正在启动\r\n");
+	usart_task_init();
+	cmd_task_init();
     for(;;)
     {
         if(rtc_ms >= 1000)
@@ -70,8 +72,9 @@ static void start_task(void * pvparameters)
             rtc_time.Hours++;
         }
 
-        HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
-        HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+//        HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);//屏蔽此处是因为rtc没有使用低速晶振会导致时间不准
+//        HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+//		mylog("start task running\r\n");
         vTaskDelay(50);
     }
 }

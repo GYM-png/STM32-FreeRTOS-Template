@@ -42,12 +42,12 @@ cmddebug\cmd.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 cmddebug\cmd.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h
 cmddebug\cmd.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 cmddebug\cmd.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h
-cmddebug\cmd.o: ../UserCode/Usart/myusart.h
 cmddebug\cmd.o: ../Core/Inc/usart.h
+cmddebug\cmd.o: ../UserCode/Usart/myusart.h
 cmddebug\cmd.o: ../Core/Inc/dma.h
 cmddebug\cmd.o: ../UserCode/global/global.h
 cmddebug\cmd.o: ../Core/Inc/rtc.h
-cmddebug\cmd.o: ..\UserCode\sys\system.h
+cmddebug\cmd.o: ../UserCode/sys/system.h
 cmddebug\cmd.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\cmd.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\cmd.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h

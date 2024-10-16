@@ -15,9 +15,8 @@ typedef struct
 {
     UART_HandleTypeDef * uart_t;    //串口号
     DMA_HandleTypeDef* dma_t;       //dma号
-    uint8_t * rx_buffer;            //接收缓冲
-    // uint8_t * rx_data;           
-    uint8_t * tx_data;              //发送数组
+    uint8_t  rx_buffer[UART_RX_LEN_MAX];            //接收缓冲
+    uint8_t tx_data[UART_TX_LEN_MAX];              //发送数组
     uint8_t rx_flag;                //接收完成标志
 }uart_dma_t;
 

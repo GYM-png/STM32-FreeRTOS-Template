@@ -11,10 +11,6 @@
 
 #include "main.h"
 
-// typedef struct
-// {
-//     void (*print)(const uint8_t * data, uint8_t len);
-// }print_t
 
 #define CMD_COUNT_MAX 30 //最大命令数量
 

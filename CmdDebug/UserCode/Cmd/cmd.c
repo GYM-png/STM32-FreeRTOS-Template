@@ -7,6 +7,7 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "cmd.h"
+#include "usart.h"
 #include "myusart.h"
 #include "global.h"
 #include "stdlib.h"
@@ -19,36 +20,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
-#include "queue.h"
 
 SemaphoreHandle_t debug_print_mutex = NULL;
-QueueHandle_t debug_print_queue = NULL;
 extern uart_dma_t debug_uart;      //调试串口句柄
 
-// int fputc(int ch, FILE *f)
-// {
-//     HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
-//     return ch;
-// }
 
-static char print_buff[UART_TX_LEN_MAX] = {0};
-
-/**
- * @brief 输出日志 带时间戳
- * @param __format 
- * @param  
- */
-void mylog(const char*__format, ...)
-{
-    xSemaphoreTake(debug_print_mutex, 1);
-    sprintf(print_buff, "%02d:%02d:%02d:%03d   ", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds, rtc_ms);
-    va_list args; // 创建一个va_list类型的变量，用来存储可变参数
-    va_start(args, __format); // 使用va_start宏初始化args，使之指向第一个可选参数
-    vsprintf(print_buff+12+4, __format, args); // 使用vsprintf而不是sprintf，因为它可以处理可变参数列表
-    va_end(args); // 使用va_end宏清理args
-    xQueueSendToBack(debug_print_queue, print_buff, 1);
-    xSemaphoreGive(debug_print_mutex);
-}
 
 /**
  * @brief 打印信息 
@@ -57,14 +33,37 @@ void mylog(const char*__format, ...)
  */
 void myprintf(const char*__format, ...)
 {
+	uart_dma_t * print_uart = &debug_uart;
     va_list args; // 创建一个va_list类型的变量，用来存储可变参数
     va_start(args, __format); // 使用va_start宏初始化args，使之指向第一个可选参数
     xSemaphoreTake(debug_print_mutex, 1);
-    vsprintf(print_buff, __format, args); // 使用vsprintf而不是sprintf，因为它可以处理可变参数列表
+    vsprintf((char*)print_uart->tx_data, __format, args); // 使用vsprintf而不是sprintf，因为它可以处理可变参数列表
     va_end(args); // 使用va_end宏清理args
-    xQueueSendToBack(debug_print_queue, print_buff, 1);
     xSemaphoreGive(debug_print_mutex);
+	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
+
 }
+
+
+/**
+ * @brief 输出日志 带时间戳
+ * @param __format 
+ * @param  
+ */
+void mylog(const char*__format, ...)
+{
+	uart_dma_t * print_uart = &debug_uart;
+    xSemaphoreTake(debug_print_mutex, 1);
+    sprintf((char*)print_uart->tx_data, "%02d:%02d:%02d:%03d\t", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds, rtc_ms);
+    va_list args; // 创建一个va_list类型的变量，用来存储可变参数
+    va_start(args, __format); // 使用va_start宏初始化args，使之指向第一个可选参数
+    vsprintf((char*)print_uart->tx_data+13, __format, args); // 使用vsprintf而不是sprintf，因为它可以处理可变参数列表
+    va_end(args); // 使用va_end宏清理args
+    xSemaphoreGive(debug_print_mutex);
+	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
+}
+
+
 
 /**
  * @brief 命令列表索引
@@ -73,7 +72,7 @@ void myprintf(const char*__format, ...)
 #define SYSTEM_R 1
 
 
-static cmd_t * cmd_list = NULL;
+static cmd_t  cmd_list[CMD_COUNT_MAX] = {0};
 uint16_t cmd_count = 0;//总命令数
 /**
  * @brief 根据命令执行对应的函数
@@ -81,20 +80,21 @@ uint16_t cmd_count = 0;//总命令数
  */
 void find_cmd(char * cmd)
 {
-	if(cmd == NULL)
+	if(cmd[0] == NULL)
 	{
 		return;
 	}
-    for (uint16_t i = 0; i < cmd_count; i++)
-    {
-        //命令对比
-        if (strncmp(cmd, cmd_list[i].cmd, strlen(cmd_list[i].cmd)) == 0)
-        {
-            cmd_list[i].callback();//执行回调
-            return;
-        }
-    }
-    myprintf("命令错误，输入help查看命令\r\n");
+		
+	for (uint16_t i = 0; i < cmd_count; i++)
+	{
+		//命令对比
+		if (strncmp(cmd, cmd_list[i].cmd, strlen(cmd_list[i].cmd)) == 0)
+		{
+			cmd_list[i].callback();//执行回调
+			return;
+		}
+	}
+	myprintf("命令错误，输入help查看命令\r\n");
 }
 
 
@@ -117,7 +117,7 @@ static void print_cmd_list(void)
  */
 static void system_rest(void)
 {
-    mylog("系统正在复位\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+    mylog("系统正在复位\r\n");
     vTaskDelay(1);
     HAL_NVIC_SystemReset();
 }
@@ -129,15 +129,8 @@ static void system_rest(void)
  */
 uint8_t cmd_init(void)
 {
-    cmd_list = (cmd_t *)malloc(CMD_COUNT_MAX * sizeof(cmd_t));
-    if (cmd_list == NULL)   
-    {
-        return ERROR;
-    }
     debug_print_mutex = xSemaphoreCreateMutex();
-    debug_print_queue = xQueueCreate(10, sizeof(char)*50);
 
-    
     /* 命令对应函数的实现 */
 	strcpy(cmd_list[HELP].cmd, "help");
     cmd_list[HELP].callback = print_cmd_list;

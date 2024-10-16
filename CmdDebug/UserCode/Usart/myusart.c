@@ -9,7 +9,6 @@
 #include "myusart.h"
 #include "string.h"
 
-#ifdef USE_FREERTOS
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
@@ -18,9 +17,6 @@
 #include "event_groups.h"
 extern TaskHandle_t USRAT_RX_TASK_Handler;//任务句柄
 
-#else
-#include "stdlib.h"
-#endif
 
 /**
  * @brief 初始化对应串口号的MDA并开始接收
@@ -36,18 +32,18 @@ uint8_t uart_dma_init(uart_dma_t* uart_dma, UART_HandleTypeDef* huart, DMA_Handl
     uart_dma->rx_flag = 0;
 
     /*为缓冲区、数据区、 发送区申请内存空间*/
-    uart_dma->rx_buffer = (uint8_t *)pvPortMalloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
-    if (uart_dma->rx_buffer)
-    {
-        return ERROR;
-    }
-    memset(uart_dma->rx_buffer, 0, UART_RX_LEN_MAX);
-    uart_dma->tx_data = (uint8_t*)pvPortMalloc(sizeof(uint8_t) * UART_TX_LEN_MAX);
-    if(uart_dma->tx_data == NULL)
-    {
-        return ERROR;
-    }
-	memset(uart_dma->tx_data, 0, UART_RX_LEN_MAX);
+//    uart_dma->rx_buffer = (uint8_t *)pvPortMalloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
+//    if (uart_dma->rx_buffer)
+//    {
+//        return ERROR;
+//    }
+//    memset(uart_dma->rx_buffer, 0, UART_RX_LEN_MAX);
+//    uart_dma->tx_data = (uint8_t*)pvPortMalloc(sizeof(uint8_t) * UART_TX_LEN_MAX);
+//    if(uart_dma->tx_data == NULL)
+//    {
+//        return ERROR;
+//    }
+//	memset(uart_dma->tx_data, 0, UART_RX_LEN_MAX);
 
     // uart_dma->rx_buffer = (uint8_t*)malloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
     // if (uart_dma->rx_buffer == NULL)
@@ -92,15 +88,11 @@ void uart_idle_callback(uart_dma_t *uart_dma)
         memset(uart_dma->rx_buffer + uart_rx_len, 0, UART_RX_LEN_MAX - uart_rx_len);
         HAL_UART_Receive_DMA(uart_dma->uart_t, uart_dma->rx_buffer, UART_RX_LEN_MAX);
 
-        #ifdef USE_FREERTOS
         /*任务通知给usart_task*/
         uart_dma->rx_flag = 1;
         // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         // vTaskNotifyGiveFromISR(USRAT_RX_TASK_Handler, &xHigherPriorityTaskWoken);
         // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-        #else
-        uart_dma->rx_flag = 1;
-        #endif
     }
 }
 
