@@ -22,16 +22,26 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 D:\warehouse\CmdDebug\CmdDebug\MDK-ARM\CmdDebug.uvprojx
-Project File Date:  10/16/2024
+Project File Date:  10/17/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil5\ARM\ARMCC\Bin'
 Build target 'CmdDebug'
+compiling system.c...
+compiling usart_task.c...
+..\UserCode\Usart\usart_task.c(59): warning:  #177-D: function "usart_rx_task"  was declared but never referenced
+  static void usart_rx_task(void *pvparameters)
+..\UserCode\Usart\usart_task.c(72): warning:  #177-D: function "usart_tx_task"  was declared but never referenced
+  static void usart_tx_task(void *pvparameters)
+..\UserCode\Usart\usart_task.c: 2 warnings, 0 errors
+compiling cmd_task.c...
+compiling stm32h7xx_it.c...
 compiling cmd.c...
+compiling myusart.c...
 linking...
 Program Size: Code=40624 RO-data=844 RW-data=416 ZI-data=42264  
 FromELF: creating hex file...
-"CmdDebug\CmdDebug.axf" - 0 Error(s), 0 Warning(s).
+"CmdDebug\CmdDebug.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -55,7 +65,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

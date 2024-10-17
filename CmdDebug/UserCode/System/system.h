@@ -9,7 +9,7 @@
 #include "semphr.h"
 #include "event_groups.h"
 
-#define OS_TASK_NUM_MAX 15//最大任务数量
+
 
 
 /**

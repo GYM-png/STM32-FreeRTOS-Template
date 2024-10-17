@@ -45,9 +45,9 @@ cmddebug\stm32h7xx_it.o: ../Core/Inc/stm32h7xx_it.h
 cmddebug\stm32h7xx_it.o: ../UserCode/Usart/myusart.h
 cmddebug\stm32h7xx_it.o: ../Core/Inc/usart.h
 cmddebug\stm32h7xx_it.o: ../Core/Inc/dma.h
-cmddebug\stm32h7xx_it.o: ../UserCode/global/global.h
+cmddebug\stm32h7xx_it.o: ..\UserCode\System\global.h
 cmddebug\stm32h7xx_it.o: ../Core/Inc/rtc.h
-cmddebug\stm32h7xx_it.o: ../UserCode/sys/system.h
+cmddebug\stm32h7xx_it.o: ..\UserCode\System\system.h
 cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\stm32h7xx_it.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
@@ -61,3 +61,4 @@ cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/time
 cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\stm32h7xx_it.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+cmddebug\stm32h7xx_it.o: ..\UserCode\System\config.h

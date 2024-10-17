@@ -12,7 +12,7 @@
 #include "main.h"
 
 
-#define CMD_COUNT_MAX 30 //最大命令数量
+
 
 
 typedef struct

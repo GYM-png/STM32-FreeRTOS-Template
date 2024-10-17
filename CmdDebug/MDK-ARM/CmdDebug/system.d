@@ -1,5 +1,5 @@
-cmddebug\system.o: ..\UserCode\sys\system.c
-cmddebug\system.o: ..\UserCode\sys\system.h
+cmddebug\system.o: ..\UserCode\System\system.c
+cmddebug\system.o: ..\UserCode\System\system.h
 cmddebug\system.o: ../Core/Inc/main.h
 cmddebug\system.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h
 cmddebug\system.o: ../Core/Inc/stm32h7xx_hal_conf.h
@@ -55,3 +55,4 @@ cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+cmddebug\system.o: ..\UserCode\System\config.h

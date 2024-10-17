@@ -71,5 +71,5 @@ cmddebug\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.
 cmddebug\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 cmddebug\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 cmddebug\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
-cmddebug\main.o: ../UserCode/global/global.h
-cmddebug\main.o: ../UserCode/sys/system.h
+cmddebug\main.o: ..\UserCode\System\global.h
+cmddebug\main.o: ..\UserCode\System\system.h

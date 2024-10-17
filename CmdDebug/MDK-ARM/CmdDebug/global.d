@@ -1,5 +1,5 @@
-cmddebug\global.o: ..\UserCode\global\global.c
-cmddebug\global.o: ..\UserCode\global\global.h
+cmddebug\global.o: ..\UserCode\System\global.c
+cmddebug\global.o: ..\UserCode\System\global.h
 cmddebug\global.o: ../Core/Inc/main.h
 cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h
 cmddebug\global.o: ../Core/Inc/stm32h7xx_hal_conf.h
@@ -43,7 +43,7 @@ cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h
 cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 cmddebug\global.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h
 cmddebug\global.o: ../Core/Inc/rtc.h
-cmddebug\global.o: ../UserCode/sys/system.h
+cmddebug\global.o: ..\UserCode\System\system.h
 cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\global.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\global.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h

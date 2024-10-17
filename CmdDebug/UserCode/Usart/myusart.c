@@ -15,8 +15,6 @@
 #include "queue.h"
 #include "semphr.h"
 #include "event_groups.h"
-extern TaskHandle_t USRAT_RX_TASK_Handler;//任务句柄
-
 
 /**
  * @brief 初始化对应串口号的MDA并开始接收

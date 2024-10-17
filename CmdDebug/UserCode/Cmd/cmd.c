@@ -2,11 +2,12 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-12 22:14:23
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-15 22:43:06
+ * @LastEditTime: 2024-10-17 22:33:49
  * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Cmd\cmd.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "cmd.h"
+#include "config.h"
 #include "usart.h"
 #include "myusart.h"
 #include "global.h"

@@ -45,9 +45,9 @@ cmddebug\usart_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 cmddebug\usart_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h
 cmddebug\usart_task.o: ../Core/Inc/usart.h
 cmddebug\usart_task.o: ../Core/Inc/dma.h
-cmddebug\usart_task.o: ../UserCode/global/global.h
+cmddebug\usart_task.o: ..\UserCode\System\global.h
 cmddebug\usart_task.o: ../Core/Inc/rtc.h
-cmddebug\usart_task.o: ../UserCode/sys/system.h
+cmddebug\usart_task.o: ..\UserCode\System\system.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\usart_task.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
@@ -61,5 +61,6 @@ cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\usart_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+cmddebug\usart_task.o: ..\UserCode\System\config.h
 cmddebug\usart_task.o: ../UserCode/Cmd/cmd.h
 cmddebug\usart_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h

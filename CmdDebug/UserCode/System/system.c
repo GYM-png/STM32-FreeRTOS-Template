@@ -7,13 +7,8 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "system.h"
+#include "config.h"
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "timers.h"
-#include "queue.h"
-#include "semphr.h"
-#include "event_groups.h"
 
 task_list_t system_task_list[OS_TASK_NUM_MAX] = {0};//任务列表 存储了所有任务的名字和句柄
 uint8_t task_count = 0;//任务数量

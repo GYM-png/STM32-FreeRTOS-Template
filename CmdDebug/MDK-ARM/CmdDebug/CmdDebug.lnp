@@ -45,7 +45,6 @@
 "cmddebug\usbd_cdc.o"
 "cmddebug\cmd.o"
 "cmddebug\cmd_task.o"
-"cmddebug\global.o"
 "cmddebug\myusart.o"
 "cmddebug\usart_task.o"
 "cmddebug\croutine.o"
@@ -58,6 +57,7 @@
 "cmddebug\cmsis_os.o"
 "cmddebug\heap_4.o"
 "cmddebug\port.o"
+"cmddebug\global.o"
 "cmddebug\system.o"
 --library_type=microlib --strict --scatter "CmdDebug\CmdDebug.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

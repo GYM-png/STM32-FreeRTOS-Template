@@ -43,12 +43,13 @@ cmddebug\cmd_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 cmddebug\cmd_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h
 cmddebug\cmd_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h
 cmddebug\cmd_task.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h
+cmddebug\cmd_task.o: ..\UserCode\System\config.h
 cmddebug\cmd_task.o: ../UserCode/Usart/myusart.h
 cmddebug\cmd_task.o: ../Core/Inc/usart.h
 cmddebug\cmd_task.o: ../Core/Inc/dma.h
-cmddebug\cmd_task.o: ../UserCode/global/global.h
+cmddebug\cmd_task.o: ..\UserCode\System\global.h
 cmddebug\cmd_task.o: ../Core/Inc/rtc.h
-cmddebug\cmd_task.o: ../UserCode/sys/system.h
+cmddebug\cmd_task.o: ..\UserCode\System\system.h
 cmddebug\cmd_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 cmddebug\cmd_task.o: ../Core/Inc/FreeRTOSConfig.h
 cmddebug\cmd_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h

@@ -5,10 +5,10 @@
 #include "usart.h"
 #include "dma.h"
 #include "global.h"
+#include "config.h"
 
 
-#define UART_RX_LEN_MAX 30//最大接收长度
-#define UART_TX_LEN_MAX 50//最大发送长度
+
 
 
 typedef struct

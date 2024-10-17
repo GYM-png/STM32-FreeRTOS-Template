@@ -8,12 +8,51 @@
  */
 #include "cmd_task.h"
 #include "cmd.h"
+#include "config.h"
 
 #include "myusart.h"
 #include "system.h"
 #include "global.h"
 
 extern uint16_t cmd_count;//总命令数
+static void system_print_version(void);
+static void system_print_task(void);
+static void show_time(void);
+
+#define CMD_TASK_PRIO 4  //任务优先级
+#define CMD_TASK_SIZE 200 //任务堆栈大小
+TaskHandle_t CMD_TASK_Handler;//任务句柄
+void cmd_task(void *pvparameters);
+
+
+/**
+ * @brief 注册命令函数
+ *        添加自己的命令需在上方完成自定义的函数，然后在此函数内调用cmd_install
+ * @param  
+ */
+void cmd_task_init(void)
+{
+    cmd_install("system -v", system_print_version);
+    cmd_install("system -t", system_print_task);
+    cmd_install("get -t", show_time);
+    //cmd_install("user -cmd", user_callback");
+    myTaskCreate((TaskFunction_t)cmd_task,
+                (const char *)"cmd_task",
+                (uint16_t)CMD_TASK_SIZE,
+                (void *)NULL,
+                (UBaseType_t)CMD_TASK_PRIO,
+                (TaskHandle_t *)&CMD_TASK_Handler);
+}
+
+
+
+
+
+
+
+
+
+
 
 static void system_print_version(void)
 {
@@ -41,28 +80,6 @@ static void show_time(void)
 {
     mylog("当前日期：%04d年%02d月%02d日\r\n", rtc_date.Year, rtc_date.Month, rtc_date.Date);
     mylog("当前时间：%02d:%02d:%02d\r\n", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
-}
-
-
-
-#define CMD_TASK_PRIO 4  //任务优先级
-#define CMD_TASK_SIZE 200 //任务堆栈大小
-TaskHandle_t CMD_TASK_Handler;//任务句柄
-void cmd_task(void *pvparameters);
-
-
-void cmd_task_init(void)
-{
-    cmd_install("system -v", system_print_version);
-    cmd_install("system -t", system_print_task);
-    cmd_install("get -t", show_time);
-
-    myTaskCreate((TaskFunction_t)cmd_task,
-                (const char *)"cmd_task",
-                (uint16_t)CMD_TASK_SIZE,
-                (void *)NULL,
-                (UBaseType_t)CMD_TASK_PRIO,
-                (TaskHandle_t *)&CMD_TASK_Handler);
 }
 
 
