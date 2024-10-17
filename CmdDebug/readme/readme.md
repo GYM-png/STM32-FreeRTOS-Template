@@ -3,8 +3,13 @@
 ### 1.移植
 1. 将`\UserCode\Cmd`文件夹、 `\UserCode\System` 文件夹、 `UserCode\Usart` 文件夹下的文件全部复制到自己的项目中。
 ![移植文件](pngs/移植文件.png)
-1. 根据自身项目情况修改`config.h` 文件中的宏定义
+2. 根据自身项目情况修改`config.h` 文件中的宏定义
 ![config](pngs/config头文件.png)
+3. 在调试串口对应的中断服务函数中加入回调函数
+   ```c
+   uart_idle_callback(&debug_uart);
+   ```
+![中断](pngs/中断添加.png)
 ### 2.系统自带命令
 - `help` :打印出所有命令
 - `system -r` :系统重启复位
