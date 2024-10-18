@@ -1,1 +1,1 @@
-[说明文档](CmdDbug/readme/readme.md)
+[说明文档](CmdDbeug/readme/readme.md)
