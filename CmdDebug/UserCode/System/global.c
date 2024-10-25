@@ -2,32 +2,26 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-13 00:22:43
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-15 23:06:07
+ * @LastEditTime: 2024-10-25 21:53:11
  * @FilePath: \MDK-ARMd:\warehouse\CmdDebug\CmdDebug\UserCode\global\global.c
- * @Description: ÕâÊÇÄ¬ÈÏÉèÖÃ,ÇëÉèÖÃ`customMade`, ´ò¿ªkoroFileHeader²é¿´ÅäÖÃ ½øÐÐÉèÖÃ: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: è¿™æ˜¯é»˜è®¤è®¾ç½®,è¯·è®¾ç½®`customMade`, æ‰“å¼€koroFileHeaderæŸ¥çœ‹é…ç½® è¿›è¡Œè®¾ç½®: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "global.h"
 #include "system.h"
-#include "usart_task.h"
-#include "cmd_task.h"
-#include "cmd.h"
 
 RTC_TimeTypeDef rtc_time;
 RTC_DateTypeDef rtc_date;
-
-
-
 uint32_t systern_run_time = 0;
-uint16_t rtc_ms = 0;//ÏµÍ³Ê±¼äms rtcÖ»ÄÜÌá¹©¾«È·µ½s
+uint16_t rtc_ms = 0;//ç³»ç»Ÿæ—¶é—´ms rtcåªèƒ½æä¾›ç²¾ç¡®åˆ°s
 
 
 
 /**
- * @defgroup start taskÏà¹Ø²ÎÊý
+ * @defgroup start taskç›¸å…³å‚æ•°
  */
-#define START_TASK_PRIO 3  //ÈÎÎñÓÅÏÈ¼¶
-#define START_TASK_SIZE 200 //ÈÎÎñ¶ÑÕ»´óÐ¡
-TaskHandle_t START_TASK_Handler;//ÈÎÎñ¾ä±ú
+#define START_TASK_PRIO 3  //ä»»åŠ¡ä¼˜å…ˆçº§
+#define START_TASK_SIZE 200 //ä»»åŠ¡å †æ ˆå¤§å°
+TaskHandle_t START_TASK_Handler;//ä»»åŠ¡å¥æŸ„
 void start_task(void *pvparameters);
 
 
@@ -36,24 +30,22 @@ void start_task(void *pvparameters);
 
 void start_task_init(void)
 {
-	cmd_init();
-    myTaskCreate((TaskFunction_t )start_task,    //ÈÎÎñº¯Êý
-                (const char *   )"start_task",   //ÈÎÎñÃû³Æ
-                (uint16_t       )START_TASK_SIZE, //ÈÎÎñ¶ÑÕ»´óÐ¡
-                (void *         )NULL,                //ÈÎÎñ²ÎÊý
-                (UBaseType_t    )START_TASK_PRIO, //ÈÎÎñÓÅÏÈ¼¶
-                (TaskHandle_t * )&START_TASK_Handler); //ÈÎÎñ¾ä¾ä±ú
+    xTaskCreate((TaskFunction_t )start_task,    //ä»»åŠ¡å‡½æ•°
+                (const char *   )"start_task",   //ä»»åŠ¡åç§°
+                (uint16_t       )START_TASK_SIZE, //ä»»åŠ¡å †æ ˆå¤§å°
+                (void *         )NULL,                //ä»»åŠ¡å‚æ•°
+                (UBaseType_t    )START_TASK_PRIO, //ä»»åŠ¡ä¼˜å…ˆçº§
+                (TaskHandle_t * )&START_TASK_Handler); //ä»»åŠ¡å¥å¥æŸ„
 }
 
 
 static void start_task(void * pvparameters)
 {
-    /*»ñÈ¡ÏµÍ³³õÊ¼Ê±¼ä*/
+    /*èŽ·å–ç³»ç»Ÿåˆå§‹æ—¶é—´*/
     HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
     HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
-	mylog("ÏµÍ³ÕýÔÚÆô¶¯\r\n");
-	usart_task_init();
-	cmd_task_init();
+    log_i("ç³»ç»Ÿå¼€æœºæˆåŠŸ\r\n");
+
     for(;;)
     {
         if(rtc_ms >= 1000)
@@ -72,10 +64,10 @@ static void start_task(void * pvparameters)
             rtc_time.Hours++;
         }
 
-//        HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);//ÆÁ±Î´Ë´¦ÊÇÒòÎªrtcÃ»ÓÐÊ¹ÓÃµÍËÙ¾§Õñ»áµ¼ÖÂÊ±¼ä²»×¼
-//        HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
-//		mylog("start task running\r\n");
-        vTaskDelay(50);
+        // log_i("ä½ å¥½\r\n");
+        // log_w("ä½ å¥½\r\n");
+        // log_e("ä½ å¥½\r\n");
+        vTaskDelay(1002);
     }
 }
 

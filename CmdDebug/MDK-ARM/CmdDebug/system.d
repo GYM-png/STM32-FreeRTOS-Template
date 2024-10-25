@@ -55,4 +55,8 @@ cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 cmddebug\system.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-cmddebug\system.o: ..\UserCode\System\config.h
+cmddebug\system.o: ..\UserCode\EasyLogger\elog.h
+cmddebug\system.o: ..\UserCode\EasyLogger\elog_cfg.h
+cmddebug\system.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdbool.h
+cmddebug\system.o: ../UserCode/Cmd/cmd.h
+cmddebug\system.o: ..\UserCode\FreeRTOS_CLI\FreeRTOS_CLI.h

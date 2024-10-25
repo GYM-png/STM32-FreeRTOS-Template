@@ -1,3 +1,11 @@
+/*
+ * @Author: GYM-png 480609450@qq.com
+ * @Date: 2024-10-13 11:05:20
+ * @LastEditors: GYM-png 480609450@qq.com
+ * @LastEditTime: 2024-10-25 20:53:29
+ * @FilePath: \MDK-ARMd:\warehouse\CmdDebug\CmdDebug\UserCode\Usart\myusart.h
+ * @Description: è¿™æ˜¯é»˜è®¤è®¾ç½®,è¯·è®¾ç½®`customMade`, æ‰“å¼€koroFileHeaderæŸ¥çœ‹é…ç½® è¿›è¡Œè®¾ç½®: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #ifndef __MYUSART_H
 #define __MYUSART_H
 
@@ -6,23 +14,26 @@
 #include "dma.h"
 #include "global.h"
 #include "config.h"
-
+#include "system.h"
 
 
 
 
 typedef struct
 {
-    UART_HandleTypeDef * uart_t;    //´®¿ÚºÅ
-    DMA_HandleTypeDef* dma_t;       //dmaºÅ
-    uint8_t  rx_buffer[UART_RX_LEN_MAX];            //½ÓÊÕ»º³å
-    uint8_t tx_data[UART_TX_LEN_MAX];              //·¢ËÍÊı×é
-    uint8_t rx_flag;                //½ÓÊÕÍê³É±êÖ¾
-}uart_dma_t;
+    UART_HandleTypeDef * huart;    //ä¸²å£å¥æŸ„
+    DMA_HandleTypeDef* dma_t;       //dma
+    uint16_t rx_len;                //æ¥æ”¶æ•°æ®é•¿åº¦
+    uint8_t  rx_buffer[UART_RX_LEN_MAX];            //æ¥æ”¶ç¼“å†²åŒº
+    uint8_t tx_data[UART_TX_LEN_MAX];              //
+    uint8_t rx_flag;                //æ¥æ”¶æ ‡å¿—
+    SemaphoreHandle_t mutex;//äº’æ–¥
+}uart_t;
 
 
-uint8_t uart_dma_init(uart_dma_t* uart_dma, UART_HandleTypeDef* huart, DMA_HandleTypeDef* dma);
-void uart_idle_callback(uart_dma_t *uart_dma);
+uint8_t uart_dma_init(uart_t* uart_dma, UART_HandleTypeDef* huart, DMA_HandleTypeDef* dma);
+void uart_idle_callback(uart_t *uart_dma);
+uint8_t uart_transmit(uart_t *uart, uint8_t* data, uint16_t len);
 
 
 #endif

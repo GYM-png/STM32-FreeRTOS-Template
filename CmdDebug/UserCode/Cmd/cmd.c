@@ -2,165 +2,261 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-12 22:14:23
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-17 22:33:49
+ * @LastEditTime: 2024-10-25 22:59:12
  * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Cmd\cmd.c
- * @Description: ÕâÊÇÄ¬ÈÏÉèÖÃ,ÇëÉèÖÃ`customMade`, ´ò¿ªkoroFileHeader²é¿´ÅäÖÃ ½øĞĞÉèÖÃ: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: è¿™æ˜¯é»˜è®¤è®¾ç½®,è¯·è®¾ç½®`customMade`, æ‰“å¼€koroFileHeaderæŸ¥çœ‹é…ç½® è¿›è¡Œè®¾ç½®: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "cmd.h"
-#include "config.h"
-#include "usart.h"
-#include "myusart.h"
-#include "global.h"
-#include "stdlib.h"
-
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h> // ÒıÈë¿É±ä²ÎÊıÍ·ÎÄ¼ş
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
-
-SemaphoreHandle_t debug_print_mutex = NULL;
-extern uart_dma_t debug_uart;      //µ÷ÊÔ´®¿Ú¾ä±ú
+#include <stdarg.h> // å¼•å…¥å¯å˜å‚æ•°å¤´æ–‡ä»¶
+#include <string.h>
+#include "system.h"
+#include "FreeRTOS_CLI.h"
+SemaphoreHandle_t write_mutex = NULL;
+static char write_buffer[200] = {0};
+static void myprintf(const char*__format, ...);
 
 
+/*************************************************ä»¥ä¸‹æ˜¯ç”¨æˆ·ä»£ç ******************************************************************** */
 
 /**
- * @brief ´òÓ¡ĞÅÏ¢ 
+ * @defgroup å‘½ä»¤å‡½æ•°å£°æ˜ 
+ * {
+ */
+static BaseType_t system_reset(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
+
+/**
+ * }
+ */
+
+/**
+ * @defgroup FreeRTOS CLIå‘½ä»¤ç»„ä»¶ 
+ * {
+ */
+static const CLI_Command_Definition_t user_command[] = {
+    {
+    .pcCommand = "system-r",\
+    .pcHelpString = "\r\nreset the mcu\r\n", \
+    .pxCommandInterpreter = system_reset, \
+    .cExpectedNumberOfParameters = 0} 
+      
+};
+/**
+ * }
+ */
+
+
+static BaseType_t system_reset(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString)
+{
+	/* Remove compile time warnings about unused parameters, and check the
+	write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+	write buffer length is adequate, so does not check for buffer overflows. */
+	( void ) pcCommandString;
+	( void ) xWriteBufferLen;
+	configASSERT( pcWriteBuffer );
+    if(xSemaphoreTake(write_mutex, 100) == pdPASS)//ä¿æŠ¤ç¼“å†²åŒº
+    {
+        memset(write_buffer, 0, sizeof(write_buffer));
+        /****************USERCODE BEGIN*****************/
+        // myprintf("ç³»ç»Ÿæ­£åœ¨é‡å¯\r\n");//è¿™é‡Œè¾“å‡ºæ²¡æœ‰ç”¨ï¼Œå¦‚æœæ²¡æœ‰è¿”å›pdFALSEï¼Œç³»ç»Ÿä¸ä¼šæ‰§è¡Œä¸²å£è¾“å‡º //å¦‚æœæƒ³ä½¿ç”¨FreeRTOSçš„CLIç»„ä»¶è¾“å‡ºå°±å°†å†…å®¹é€šè¿‡è¿™ä¸ªå‡½æ•°å†™å…¥
+        log_i("ç³»ç»Ÿå³å°†é‡å¯\r\n");
+        vTaskDelay(1000); // 1såé‡å¯
+        HAL_NVIC_SystemReset();
+        /****************USERCODE END*****************/
+        strcpy( pcWriteBuffer, write_buffer );
+        xSemaphoreGive(write_mutex);
+    }
+	/* There is no more data to return after this single string, so return
+	pdFALSE. */
+	return pdFALSE;
+}
+
+/*************************************************ä»¥ä¸‹æ˜¯å†…éƒ¨è°ƒç”¨å‡½æ•°******************************************************************** */
+
+/**
+ * @brief ç”¨æˆ·å‘½ä»¤åˆå§‹åŒ–
+ *        åœ¨ä»»åŠ¡è°ƒåº¦å¼€å§‹ä¹‹å‰ä½¿ç”¨
+ * @param  
+ */
+void cmd_init(void)
+{
+    write_mutex = xSemaphoreCreateMutex();
+    for (uint8_t i = 0; i < sizeof(user_command)/sizeof(user_command[0]); i++)
+    {
+        FreeRTOS_CLIRegisterCommand( &user_command[i] );	
+    }
+}
+
+/**
+ * @brief ä»…ä½œä¸ºå‘½ä»¤å›è°ƒå‡½æ•°å†…ä½¿ç”¨çš„æ‰“å°å‡½æ•°
  * @param __format 
  * @param  
  */
-void myprintf(const char*__format, ...)
+static void myprintf(const char*__format, ...)
 {
-	uart_dma_t * print_uart = &debug_uart;
-    va_list args; // ´´½¨Ò»¸öva_listÀàĞÍµÄ±äÁ¿£¬ÓÃÀ´´æ´¢¿É±ä²ÎÊı
-    va_start(args, __format); // Ê¹ÓÃva_startºê³õÊ¼»¯args£¬Ê¹Ö®Ö¸ÏòµÚÒ»¸ö¿ÉÑ¡²ÎÊı
-    xSemaphoreTake(debug_print_mutex, 1);
-    vsprintf((char*)print_uart->tx_data, __format, args); // Ê¹ÓÃvsprintf¶ø²»ÊÇsprintf£¬ÒòÎªËü¿ÉÒÔ´¦Àí¿É±ä²ÎÊıÁĞ±í
-    va_end(args); // Ê¹ÓÃva_endºêÇåÀíargs
-    xSemaphoreGive(debug_print_mutex);
-	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
-
+    va_list args; // åˆ›å»ºä¸€ä¸ªva_listç±»å‹çš„å˜é‡ï¼Œç”¨æ¥å­˜å‚¨å¯å˜å‚æ•°
+    va_start(args, __format); // ä½¿ç”¨va_startå®åˆå§‹åŒ–argsï¼Œä½¿ä¹‹æŒ‡å‘ç¬¬ä¸€ä¸ªå¯é€‰å‚æ•°
+    vsnprintf(write_buffer + strlen(write_buffer), sizeof(write_buffer), __format, args); // ä½¿ç”¨vsnprintfä»£æ›¿sprintfï¼Œå› ä¸ºå®ƒå¯ä»¥å¤„ç†å¯å˜å‚æ•°åˆ—è¡¨
+    va_end(args); // ä½¿argsä¸å†æŒ‡å‘å¯å˜å‚æ•°åˆ—è¡¨ä¸­çš„ä»»ä½•å‚æ•°
+    xSemaphoreGive(write_mutex);
 }
+/********************************************************************************************** */
+// #include "config.h"
+// #include "usart.h"
+// #include "myusart.h"
+// #include "global.h"
+// #include "stdlib.h"
+
+// #include <string.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <stdarg.h> // å¼•å…¥å¯å˜å‚æ•°å¤´æ–‡ä»¶
+
+// #include "FreeRTOS.h"
+// #include "task.h"
+// #include "semphr.h"
+
+// SemaphoreHandle_t debug_print_mutex = NULL;
+// extern uart_dma_t debug_uart;      //è°ƒè¯•ä¸²å£å¥æŸ„
 
 
-/**
- * @brief Êä³öÈÕÖ¾ ´øÊ±¼ä´Á
- * @param __format 
- * @param  
- */
-void mylog(const char*__format, ...)
-{
-	uart_dma_t * print_uart = &debug_uart;
-    xSemaphoreTake(debug_print_mutex, 1);
-    sprintf((char*)print_uart->tx_data, "%02d:%02d:%02d:%03d\t", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds, rtc_ms);
-    va_list args; // ´´½¨Ò»¸öva_listÀàĞÍµÄ±äÁ¿£¬ÓÃÀ´´æ´¢¿É±ä²ÎÊı
-    va_start(args, __format); // Ê¹ÓÃva_startºê³õÊ¼»¯args£¬Ê¹Ö®Ö¸ÏòµÚÒ»¸ö¿ÉÑ¡²ÎÊı
-    vsprintf((char*)print_uart->tx_data+13, __format, args); // Ê¹ÓÃvsprintf¶ø²»ÊÇsprintf£¬ÒòÎªËü¿ÉÒÔ´¦Àí¿É±ä²ÎÊıÁĞ±í
-    va_end(args); // Ê¹ÓÃva_endºêÇåÀíargs
-    xSemaphoreGive(debug_print_mutex);
-	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
-}
+
+// /**
+//  * @brief æ‰“å°ä¿¡æ¯ 
+//  * @param __format 
+//  * @param  
+//  */
+// void myprintf(const char*__format, ...)
+// {
+// 	uart_dma_t * print_uart = &debug_uart;
+//     va_list args; // åˆ›å»ºä¸€ä¸ªva_listç±»å‹çš„å˜é‡ï¼Œç”¨æ¥å­˜å‚¨å¯å˜å‚æ•°
+//     va_start(args, __format); // ä½¿ç”¨va_startå®åˆå§‹åŒ–argsï¼Œä½¿ä¹‹æŒ‡å‘ç¬¬ä¸€ä¸ªå¯é€‰å‚æ•°
+//     xSemaphoreTake(debug_print_mutex, 1);
+//     vsprintf((char*)print_uart->tx_data, __format, args); // ä½¿ç”¨vsprintfè€Œä¸æ˜¯sprintfï¼Œå› ä¸ºå®ƒå¯ä»¥å¤„ç†å¯å˜å‚æ•°åˆ—è¡¨
+//     va_end(args); // ä½¿ç”¨va_endå®æ¸…ç†args
+//     xSemaphoreGive(debug_print_mutex);
+// 	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
+
+// }
+
+
+// /**
+//  * @brief è¾“å‡ºæ—¥å¿— å¸¦æ—¶é—´æˆ³
+//  * @param __format 
+//  * @param  
+//  */
+// void mylog(const char*__format, ...)
+// {
+// 	uart_dma_t * print_uart = &debug_uart;
+//     xSemaphoreTake(debug_print_mutex, 1);
+//     sprintf((char*)print_uart->tx_data, "%02d:%02d:%02d:%03d\t", rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds, rtc_ms);
+//     va_list args; // åˆ›å»ºä¸€ä¸ªva_listç±»å‹çš„å˜é‡ï¼Œç”¨æ¥å­˜å‚¨å¯å˜å‚æ•°
+//     va_start(args, __format); // ä½¿ç”¨va_startå®åˆå§‹åŒ–argsï¼Œä½¿ä¹‹æŒ‡å‘ç¬¬ä¸€ä¸ªå¯é€‰å‚æ•°
+//     vsprintf((char*)print_uart->tx_data+13, __format, args); // ä½¿ç”¨vsprintfè€Œä¸æ˜¯sprintfï¼Œå› ä¸ºå®ƒå¯ä»¥å¤„ç†å¯å˜å‚æ•°åˆ—è¡¨
+//     va_end(args); // ä½¿ç”¨va_endå®æ¸…ç†args
+//     xSemaphoreGive(debug_print_mutex);
+// 	HAL_UART_Transmit(print_uart->uart_t, (uint8_t*)print_uart->tx_data, strlen((char*)print_uart->tx_data), 10);
+// }
 
 
 
-/**
- * @brief ÃüÁîÁĞ±íË÷Òı
- */
-#define HELP     0
-#define SYSTEM_R 1
+// /**
+//  * @brief å‘½ä»¤åˆ—è¡¨ç´¢å¼•
+//  */
+// #define HELP     0
+// #define SYSTEM_R 1
 
 
-static cmd_t  cmd_list[CMD_COUNT_MAX] = {0};
-uint16_t cmd_count = 0;//×ÜÃüÁîÊı
-/**
- * @brief ¸ù¾İÃüÁîÖ´ĞĞ¶ÔÓ¦µÄº¯Êı
- * @param cmd ÃüÁî
- */
-void find_cmd(char * cmd)
-{
-	if(cmd[0] == NULL)
-	{
-		return;
-	}
+// static cmd_t  cmd_list[CMD_COUNT_MAX] = {0};
+// uint16_t cmd_count = 0;//æ€»å‘½ä»¤æ•°
+// /**
+//  * @brief æ ¹æ®å‘½ä»¤æ‰§è¡Œå¯¹åº”çš„å‡½æ•°
+//  * @param cmd å‘½ä»¤
+//  */
+// void find_cmd(char * cmd)
+// {
+// 	if(cmd[0] == NULL)
+// 	{
+// 		return;
+// 	}
 		
-	for (uint16_t i = 0; i < cmd_count; i++)
-	{
-		//ÃüÁî¶Ô±È
-		if (strncmp(cmd, cmd_list[i].cmd, strlen(cmd_list[i].cmd)) == 0)
-		{
-			cmd_list[i].callback();//Ö´ĞĞ»Øµ÷
-			return;
-		}
-	}
-	myprintf("ÃüÁî´íÎó£¬ÊäÈëhelp²é¿´ÃüÁî\r\n");
-}
+// 	for (uint16_t i = 0; i < cmd_count; i++)
+// 	{
+// 		//å‘½ä»¤å¯¹æ¯”
+// 		if (strncmp(cmd, cmd_list[i].cmd, strlen(cmd_list[i].cmd)) == 0)
+// 		{
+// 			cmd_list[i].callback();//æ‰§è¡Œå›è°ƒ
+// 			return;
+// 		}
+// 	}
+// 	myprintf("å‘½ä»¤é”™è¯¯ï¼Œè¾“å…¥helpæŸ¥çœ‹å‘½ä»¤\r\n");
+// }
 
 
-/**
- * @brief ´òÓ¡ËùÓĞÖ¸Áî help Ö¸Áî¶ÔÓ¦µÄ»Øµ÷
- * @param  
- */
-static void print_cmd_list(void)
-{
-    myprintf("====ÃüÁîÁĞ±í====\r\n");
-    for (uint16_t i = 1; i < cmd_count; i++)
-    {
-        myprintf("%s\r\n", cmd_list[i].cmd);
-    }
-}
+// /**
+//  * @brief æ‰“å°æ‰€æœ‰æŒ‡ä»¤ help æŒ‡ä»¤å¯¹åº”çš„å›è°ƒ
+//  * @param  
+//  */
+// static void print_cmd_list(void)
+// {
+//     myprintf("====å‘½ä»¤åˆ—è¡¨====\r\n");
+//     for (uint16_t i = 1; i < cmd_count; i++)
+//     {
+//         myprintf("%s\r\n", cmd_list[i].cmd);
+//     }
+// }
 
-/**
- * @brief ÏµÍ³ÖØÆô
- * @param  
- */
-static void system_rest(void)
-{
-    mylog("ÏµÍ³ÕıÔÚ¸´Î»\r\n");
-    vTaskDelay(1);
-    HAL_NVIC_SystemReset();
-}
+// /**
+//  * @brief ç³»ç»Ÿé‡å¯
+//  * @param  
+//  */
+// static void system_rest(void)
+// {
+//     mylog("ç³»ç»Ÿæ­£åœ¨å¤ä½\r\n");
+//     vTaskDelay(1);
+//     HAL_NVIC_SystemReset();
+// }
 
 
-/**
- * @brief ÃüÁî³õÊ¼»¯º¯Êı
- *        ÆäÖĞ³õÊ¼»¯Ò»Ğ©ÏµÍ³¼¶µÄÃüÁî
- */
-uint8_t cmd_init(void)
-{
-    debug_print_mutex = xSemaphoreCreateMutex();
+// /**
+//  * @brief å‘½ä»¤åˆå§‹åŒ–å‡½æ•°
+//  *        å…¶ä¸­åˆå§‹åŒ–ä¸€äº›ç³»ç»Ÿçº§çš„å‘½ä»¤
+//  */
+// uint8_t cmd_init(void)
+// {
+//     debug_print_mutex = xSemaphoreCreateMutex();
 
-    /* ÃüÁî¶ÔÓ¦º¯ÊıµÄÊµÏÖ */
-	strcpy(cmd_list[HELP].cmd, "help");
-    cmd_list[HELP].callback = print_cmd_list;
-    cmd_count++;
+//     /* å‘½ä»¤å¯¹åº”å‡½æ•°çš„å®ç° */
+// 	strcpy(cmd_list[HELP].cmd, "help");
+//     cmd_list[HELP].callback = print_cmd_list;
+//     cmd_count++;
     
-    cmd_list[SYSTEM_R].cmd = "system -r";
-    cmd_list[SYSTEM_R].callback = system_rest;
-    cmd_count++;
+//     cmd_list[SYSTEM_R].cmd = "system -r";
+//     cmd_list[SYSTEM_R].callback = system_rest;
+//     cmd_count++;
 
-    return OK;
-}
+//     return OK;
+// }
 
-/**
- * @brief ÃüÁî×¢²á
- * @param cmd ÃüÁî×Ö·û´®
- * @param callback »Øµ÷º¯Êı
- */
-void cmd_install(char* cmd, void(*callback)(void))
-{
-    if(cmd == NULL || callback == NULL)
-    {
-        return;
-    } 
-    if (cmd_count == CMD_COUNT_MAX)//·ÀÖ¹Òç³ö
-    {
-        return;
-    }
+// /**
+//  * @brief å‘½ä»¤æ³¨å†Œ
+//  * @param cmd å‘½ä»¤å­—ç¬¦ä¸²
+//  * @param callback å›è°ƒå‡½æ•°
+//  */
+// void cmd_install(char* cmd, void(*callback)(void))
+// {
+//     if(cmd == NULL || callback == NULL)
+//     {
+//         return;
+//     } 
+//     if (cmd_count == CMD_COUNT_MAX)//é˜²æ­¢æº¢å‡º
+//     {
+//         return;
+//     }
     
-    cmd_list[cmd_count].cmd = cmd;
-    cmd_list[cmd_count].callback = callback;
-    cmd_count++;
-}
+//     cmd_list[cmd_count].cmd = cmd;
+//     cmd_list[cmd_count].callback = callback;
+//     cmd_count++;
+// }
+
+/******************************************FreeRTOS CLIæ¥å£************************************************************ */

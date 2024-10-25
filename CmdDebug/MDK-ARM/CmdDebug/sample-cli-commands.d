@@ -1,0 +1,16 @@
+cmddebug\sample-cli-commands.o: ..\UserCode\FreeRTOS_CLI\Sample-CLI-commands.c
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+cmddebug\sample-cli-commands.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+cmddebug\sample-cli-commands.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+cmddebug\sample-cli-commands.o: ../Core/Inc/FreeRTOSConfig.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+cmddebug\sample-cli-commands.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+cmddebug\sample-cli-commands.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+cmddebug\sample-cli-commands.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+cmddebug\sample-cli-commands.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+cmddebug\sample-cli-commands.o: ..\UserCode\FreeRTOS_CLI\FreeRTOS_CLI.h

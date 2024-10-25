@@ -1,0 +1,9 @@
+cmddebug\elog.o: ..\UserCode\EasyLogger\elog.c
+cmddebug\elog.o: ..\UserCode\EasyLogger\elog.h
+cmddebug\elog.o: ..\UserCode\EasyLogger\elog_cfg.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdbool.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+cmddebug\elog.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h

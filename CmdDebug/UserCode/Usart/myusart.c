@@ -1,11 +1,4 @@
-/*
- * @Author: GYM-png 480609450@qq.com
- * @Date: 2024-10-13 11:04:59
- * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-14 20:51:54
- * @FilePath: \EIDEd:\warehouse\CmdDebug\CmdDebug\UserCode\Usart\myusart.c
- * @Description: ÕâÊÇÄ¬ÈÏÉèÖÃ,ÇëÉèÖÃ`customMade`, ´ò¿ªkoroFileHeader²é¿´ÅäÖÃ ½øĞĞÉèÖÃ: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
+
 #include "myusart.h"
 #include "string.h"
 
@@ -17,80 +10,69 @@
 #include "event_groups.h"
 
 /**
- * @brief ³õÊ¼»¯¶ÔÓ¦´®¿ÚºÅµÄMDA²¢¿ªÊ¼½ÓÊÕ
- * @param uart_dma ´®¿ÚDMA½á¹¹ÌåÖ¸Õë
- * @param huart ´®¿ÚºÅ
- * @param dma dmaºÅ
+ * @brief åˆå§‹åŒ–å¯¹åº”ä¸²å£å·çš„MDAå¹¶å¼€å§‹æ¥æ”¶
+ * @param uart_dma ä¸²å£DMAç»“æ„ä½“æŒ‡é’ˆ
+ * @param huart ä¸²å£å·
+ * @param dma dmaå·
  * @return 
  */
-uint8_t uart_dma_init(uart_dma_t* uart_dma, UART_HandleTypeDef* huart, DMA_HandleTypeDef* dma)
+uint8_t uart_dma_init(uart_t* uart, UART_HandleTypeDef* huart, DMA_HandleTypeDef* dma)
 {
-    uart_dma->uart_t = huart;
-    uart_dma->dma_t = dma;
-    uart_dma->rx_flag = 0;
+    uart->huart = huart;
+    uart->dma_t = dma;
+    uart->rx_flag = 0;
+    uart->rx_len = 0;
+    uart->mutex = NULL;
+    uart->mutex = xSemaphoreCreateMutex();
 
-    /*Îª»º³åÇø¡¢Êı¾İÇø¡¢ ·¢ËÍÇøÉêÇëÄÚ´æ¿Õ¼ä*/
-//    uart_dma->rx_buffer = (uint8_t *)pvPortMalloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
-//    if (uart_dma->rx_buffer)
-//    {
-//        return ERROR;
-//    }
-//    memset(uart_dma->rx_buffer, 0, UART_RX_LEN_MAX);
-//    uart_dma->tx_data = (uint8_t*)pvPortMalloc(sizeof(uint8_t) * UART_TX_LEN_MAX);
-//    if(uart_dma->tx_data == NULL)
-//    {
-//        return ERROR;
-//    }
-//	memset(uart_dma->tx_data, 0, UART_RX_LEN_MAX);
 
-    // uart_dma->rx_buffer = (uint8_t*)malloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
-    // if (uart_dma->rx_buffer == NULL)
-    // {
-    //     return ERROR;
-    // }
-	// memset(uart_dma->rx_buffer, 0, UART_RX_LEN_MAX);
-    // // uart_dma->rx_data = (uint8_t*)malloc(sizeof(uint8_t) * UART_RX_LEN_MAX);
-    // // if (uart_dma->rx_data == NULL)
-    // // {
-    // //     return ERROR;
-    // // }
-    // uart_dma->tx_data = (uint8_t*)malloc(sizeof(uint8_t) * UART_TX_LEN_MAX);
-    // if(uart_dma->tx_data == NULL)
-    // {
-    //     return ERROR;
-    // }
-	// memset(uart_dma->tx_data, 0, UART_RX_LEN_MAX);
-
-    /*¿ªÆô¿ÕÏĞÖĞ¶Ï²¢¿ªÆôDMA½ÓÊÕ*/
+    /*å¼€å¯ç©ºé—²ä¸­æ–­å¹¶å¼€å¯DMAæ¥æ”¶*/
     __HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
-    HAL_UART_Receive_DMA(huart, uart_dma->rx_buffer, UART_RX_LEN_MAX);
+    HAL_UART_Receive_DMA(huart, uart->rx_buffer, UART_RX_LEN_MAX);
     return OK;
 }
 
 
 
 /**
- * @brief ´®¿Ú¿ÕÏĞÖĞ¶Ï
- *        Ö±½ÓÔÚ´®¿ÚIRQÖĞµ÷ÓÃ
- * @param uart_dma ´®¿ÚDMA½á¹¹ÌåÖ¸Õë
+ * @brief ä¸²å£ç©ºé—²ä¸­æ–­
+ *        ç›´æ¥åœ¨ä¸²å£IRQä¸­è°ƒç”¨
+ * @param uart_dma ä¸²å£DMAç»“æ„ä½“æŒ‡é’ˆ
  */
-void uart_idle_callback(uart_dma_t *uart_dma)
+void uart_idle_callback(uart_t *uart)
 {
-    if(__HAL_UART_GET_FLAG(uart_dma->uart_t, UART_FLAG_IDLE) != RESET)
+    if(__HAL_UART_GET_FLAG(uart->huart, UART_FLAG_IDLE) != RESET)
     {
-        /*DMA½ÓÊÕ´¦Àí*/
-        __HAL_UART_CLEAR_IDLEFLAG(uart_dma->uart_t);
-        HAL_UART_DMAStop(uart_dma->uart_t);
-        uint8_t uart_rx_len = 0;
-        uart_rx_len = UART_RX_LEN_MAX - __HAL_DMA_GET_COUNTER(uart_dma->dma_t);
-        memset(uart_dma->rx_buffer + uart_rx_len, 0, UART_RX_LEN_MAX - uart_rx_len);
-        HAL_UART_Receive_DMA(uart_dma->uart_t, uart_dma->rx_buffer, UART_RX_LEN_MAX);
+        /*DMAæ¥æ”¶å¤„ç†*/
+        __HAL_UART_CLEAR_IDLEFLAG(uart->huart);
+        HAL_UART_DMAStop(uart->huart);
+        uart->rx_len = UART_RX_LEN_MAX - __HAL_DMA_GET_COUNTER(uart->dma_t);
+        memset(uart->rx_buffer + uart->rx_len, 0, UART_RX_LEN_MAX - uart->rx_len);
+        HAL_UART_Receive_DMA(uart->huart, uart->rx_buffer, UART_RX_LEN_MAX);
 
-        /*ÈÎÎñÍ¨Öª¸øusart_task*/
-        uart_dma->rx_flag = 1;
-        // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        // vTaskNotifyGiveFromISR(USRAT_RX_TASK_Handler, &xHigherPriorityTaskWoken);
-        // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        /*æ ‡å¿—ä½ç½®1*/
+        uart->rx_flag = 1;
     }
 }
 
+/**
+ * @brief ä¸²å£å‘é€ åº”ç”¨å±‚è°ƒç”¨
+ * @param uart ä¸²å£å¥æŸ„
+ * @param data å‘é€æ•°æ®
+ * @param len æ•°æ®é•¿åº¦
+ * @return 1-å¤±è´¥ 0æˆåŠŸ
+ */
+uint8_t uart_transmit(uart_t *uart, uint8_t* data, uint16_t len)
+{
+    if(uart->mutex != NULL)
+    {
+        xSemaphoreTake(uart->mutex, 200);
+        HAL_UART_Transmit(uart->huart, data, len, 100);
+        xSemaphoreGive(uart->mutex);
+    }
+    else
+    {
+        HAL_UART_Transmit(uart->huart, data, len, 100);
+    }
+    return 0;
+}

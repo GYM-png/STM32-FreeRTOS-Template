@@ -44,9 +44,7 @@
 "cmddebug\usbd_ioreq.o"
 "cmddebug\usbd_cdc.o"
 "cmddebug\cmd.o"
-"cmddebug\cmd_task.o"
 "cmddebug\myusart.o"
-"cmddebug\usart_task.o"
 "cmddebug\croutine.o"
 "cmddebug\event_groups.o"
 "cmddebug\list.o"
@@ -59,6 +57,13 @@
 "cmddebug\port.o"
 "cmddebug\global.o"
 "cmddebug\system.o"
+"cmddebug\freertos_cli.o"
+"cmddebug\sample-cli-commands.o"
+"cmddebug\serial.o"
+"cmddebug\uartcommandconsole.o"
+"cmddebug\elog.o"
+"cmddebug\elog_port.o"
+"cmddebug\elog_utils.o"
 --library_type=microlib --strict --scatter "CmdDebug\CmdDebug.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

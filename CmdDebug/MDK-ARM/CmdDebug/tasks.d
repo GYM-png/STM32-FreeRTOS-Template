@@ -14,3 +14,4 @@ cmddebug\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 cmddebug\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 cmddebug\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 cmddebug\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/stack_macros.h
+cmddebug\tasks.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h

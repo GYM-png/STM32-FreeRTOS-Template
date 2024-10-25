@@ -21,27 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.2.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-D:\warehouse\CmdDebug\CmdDebug\MDK-ARM\CmdDebug.uvprojx
-Project File Date:  10/17/2024
+d:\warehouse\CmdDebug\CmdDebug\MDK-ARM\CmdDebug.uvprojx
+Project File Date:  10/25/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil5\ARM\ARMCC\Bin'
 Build target 'CmdDebug'
-compiling system.c...
-compiling usart_task.c...
-..\UserCode\Usart\usart_task.c(59): warning:  #177-D: function "usart_rx_task"  was declared but never referenced
-  static void usart_rx_task(void *pvparameters)
-..\UserCode\Usart\usart_task.c(72): warning:  #177-D: function "usart_tx_task"  was declared but never referenced
-  static void usart_tx_task(void *pvparameters)
-..\UserCode\Usart\usart_task.c: 2 warnings, 0 errors
-compiling cmd_task.c...
-compiling stm32h7xx_it.c...
 compiling cmd.c...
-compiling myusart.c...
+..\UserCode\Cmd\cmd.c(95): warning:  #177-D: function "myprintf"  was declared but never referenced
+  static void myprintf(const char*__format, ...)
+..\UserCode\Cmd\cmd.c: 1 warning, 0 errors
 linking...
-Program Size: Code=40624 RO-data=844 RW-data=416 ZI-data=42264  
+Program Size: Code=45512 RO-data=2092 RW-data=504 ZI-data=44184  
 FromELF: creating hex file...
-"CmdDebug\CmdDebug.axf" - 0 Error(s), 2 Warning(s).
+"CmdDebug\CmdDebug.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -65,7 +58,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:07
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

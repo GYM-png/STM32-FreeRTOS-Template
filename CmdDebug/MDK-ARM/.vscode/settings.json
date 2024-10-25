@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "myusart.h": "c",
+        "system.h": "c",
+        "elog.h": "c",
+        "global.h": "c"
+    }
+}
