@@ -2,12 +2,19 @@
  * @Author: GYM-png 480609450@qq.com
  * @Date: 2024-10-17 22:16:25
  * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-25 22:58:59
+ * @LastEditTime: 2024-10-25 23:22:48
  * @FilePath: \undefinedd:\warehouse\CmdDebug\CmdDebug\readme\readme.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
-## 使用方法
-本项目运行在FreeRTOS操作系统下
+## Readme
+本项目运行在FreeRTOS操作系统下，FreeRTOS相关配置如下：
+使用CubeMx开启`configUSE_TRACE_FACILITY` 和 `configUSE_STATS_FORMATTING_FUNCTIONS`两个宏 
+![FreeRTOS配置](pngs/FreeRTOS相关配置.png)
+也可以在` FreeRTOSConfig.h` 文件中手动开启
+```c
+#define configUSE_TRACE_FACILITY                 1
+#define configUSE_STATS_FORMATTING_FUNCTIONS     1
+```
 ### 1.移植
 1. 将`\UserCode\Cmd`文件夹、 `\UserCode\System` 文件夹、 `UserCode\Usart` 文件夹下的文件全部复制到自己的项目中。
 ![移植文件](pngs/移植文件.png)
