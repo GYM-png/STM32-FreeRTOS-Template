@@ -21,13 +21,30 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.2.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-D:\warehouse\CmdDebug\MDK-ARM\CmdDebug.uvprojx
+d:\warehouse\CmdDebug\MDK-ARM\CmdDebug.uvprojx
 Project File Date:  10/25/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\keil5\ARM\ARMCC\Bin'
 Build target 'CmdDebug'
-"CmdDebug\CmdDebug.axf" - 0 Error(s), 0 Warning(s).
+compiling cmd.c...
+..\UserCode\Cmd\cmd.c(77): warning:  #870-D: invalid multibyte character sequence
+          const char *const pcHeader = "    çŠ¶æ€?   ä¼˜å…ˆçº?   å †æ ˆ     #\r\n************************************************\r\n";
+..\UserCode\Cmd\cmd.c(77): warning:  #870-D: invalid multibyte character sequence
+          const char *const pcHeader = "    çŠ¶æ€?   ä¼˜å…ˆçº?   å †æ ˆ     #\r\n************************************************\r\n";
+..\UserCode\Cmd\cmd.c(130): warning:  #870-D: invalid multibyte character sequence
+          log_v("%04då¹?%02dæœ?%02dæ—? %02d:%02d:%02d", rtc_date.Year, rtc_date.Month, rtc_date.Date, rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+..\UserCode\Cmd\cmd.c(130): warning:  #870-D: invalid multibyte character sequence
+          log_v("%04då¹?%02dæœ?%02dæ—? %02d:%02d:%02d", rtc_date.Year, rtc_date.Month, rtc_date.Date, rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+..\UserCode\Cmd\cmd.c(130): warning:  #870-D: invalid multibyte character sequence
+          log_v("%04då¹?%02dæœ?%02dæ—? %02d:%02d:%02d", rtc_date.Year, rtc_date.Month, rtc_date.Date, rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
+..\UserCode\Cmd\cmd.c(157): warning:  #177-D: function "myprintf"  was declared but never referenced
+  static void myprintf(const char*__format, ...)
+..\UserCode\Cmd\cmd.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=45704 RO-data=1752 RW-data=504 ZI-data=43984  
+FromELF: creating hex file...
+"CmdDebug\CmdDebug.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -51,7 +68,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
