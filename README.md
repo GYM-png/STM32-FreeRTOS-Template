@@ -1,7 +1,9 @@
 ## Readme
+这是一个基于FreeRTOS CLI组件的Easylogger移植，更改了部分CLI代码，实现更符合linux习惯的命令行
 本项目运行在FreeRTOS操作系统下，FreeRTOS相关配置如下：
 使用CubeMx开启`configUSE_TRACE_FACILITY` 和 `configUSE_STATS_FORMATTING_FUNCTIONS`两个宏 
 ![FreeRTOS配置](readme/pngs/FreeRTOS相关配置.png)
+
 也可以在` FreeRTOSConfig.h` 文件中手动开启
 ```c
 #define configUSE_TRACE_FACILITY                 1
@@ -96,3 +98,5 @@
 - [x] 优化FreeRTOS CLI组件，自写参数提取函数，使命令行格式完全符合linux，以‘-’分隔参数 
 - [ ] 优化命令查找函数，使其能自适应命令数量
 - [ ] 增加历史命令查找功能，键盘上键能浏览历史命令
+- [ ] 移植SFUD操作SPI Flash
+- [ ] 移植Fatfs文件系统纪录日志
