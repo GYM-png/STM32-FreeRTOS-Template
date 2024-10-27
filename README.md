@@ -20,7 +20,12 @@
 	extern void vUARTInterruptHandler( void );
 	vUARTInterruptHandler();
    ```
-![中断](readme/pngs/中断添加.png)
+   ![中断](readme/pngs/中断添加.png)
+1. 在`FreeRTOSConfig.h`文件中添加一句宏定义
+   ```c
+   #define configCOMMAND_INT_MAX_OUTPUT_SIZE 1024
+   ```
+   ![FreeRTOSConfig.h](readme/pngs/FreeRTOSConfig.h.png)
 ### 2.系统自带命令
 - `help` :打印出所有命令
   ![help](readme/pngs/help.png)
