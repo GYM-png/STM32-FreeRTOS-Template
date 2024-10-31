@@ -25,9 +25,9 @@ static uint8_t find_parameters(const char *pcParameter, const uint8_t n, char **
  * @defgroup 命令函数声明 
  * {
  */
-static BaseType_t system_reset(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
+static BaseType_t system_command(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
 static BaseType_t get_command(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
-
+static BaseType_t clear_command(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
 /**
  * }
  */
@@ -40,20 +40,25 @@ static const CLI_Command_Definition_t user_command[] = {
     {
     .pcCommand = "system",\
     .pcHelpString = "system:\t\t-t:get task; -r:reset mcu\r\n", \
-    .pxCommandInterpreter = system_reset, \
+    .pxCommandInterpreter = system_command, \
     .cExpectedNumberOfParameters = 1}, 
     {
     .pcCommand = "get",\
     .pcHelpString = "get:\t\t-t:get time\r\n", \
     .pxCommandInterpreter = get_command, \
-    .cExpectedNumberOfParameters = 1} 
+    .cExpectedNumberOfParameters = 1},
+    {
+    .pcCommand = "clear",\
+    .pcHelpString = "clear:\t\tclear the screen\r\n", \
+    .pxCommandInterpreter = clear_command, \
+    .cExpectedNumberOfParameters = 0}
 };
 /**
  * }
  */
 
 
-static BaseType_t system_reset(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString)
+static BaseType_t system_command(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString)
 {
 static UBaseType_t uxParameterNumber = 1;   //总参数量
 	( void ) pcCommandString;
@@ -129,6 +134,19 @@ static UBaseType_t uxParameterNumber = 1;   //总参数量
         log_v("当前系统时间:\r\n");
         log_v("%04d年%02d月%02d日 %02d:%02d:%02d", rtc_date.Year, rtc_date.Month, rtc_date.Date, rtc_time.Hours, rtc_time.Minutes, rtc_time.Seconds);
     }
+	return pdFALSE;
+}
+
+static BaseType_t clear_command( char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString )
+{
+static UBaseType_t uxParameterNumber = 0;   //总参数量
+	( void ) pcCommandString;
+	( void ) xWriteBufferLen;
+	configASSERT( pcWriteBuffer );
+    pcWriteBuffer[0] = '\0';        //清除上次输出残留
+
+    log_v("\r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n \r\n ");
+
 	return pdFALSE;
 }
 
