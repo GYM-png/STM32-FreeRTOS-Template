@@ -72,7 +72,7 @@ void vUARTCommandConsoleStart( uint16_t usStackSize, UBaseType_t uxPriority );
 /*-----------------------------------------------------------*/
 
 /* Const messages output by the command console. */
-static const char * const pcWelcomeMessage = "FreeRTOS command server. nType Help to view a list of registered commands.\r\n\r\n>";
+static const char * const pcWelcomeMessage = "FreeRTOS command server. nType Help to view a list of registered commands.\r\n>";
 static const char * const pcEndOfOutputMessage = "\r\n>";
 static const char * const pcNewLine = "\r\n";
 
