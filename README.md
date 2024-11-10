@@ -36,13 +36,23 @@
 
 ### 3.API使用
 #### 初始化
-1. 包含头文件`#include "system.h"`
+1. 在main.c文件中包含头文件
+   ```c
+   #include "system.h"
+   #include "global.h"
+   ```
    包含该头文件后可直接使用log相关函数
 2. 系统开启调度和使用log相关函数前调用初始化函数 `debug_init()`
    ```c
       debug_init();
    ```
    ![初始化](readme/pngs/初始化.png)
+3. 系统节拍计数
+   在系统节拍定时器中断中对节拍计数
+   ```c
+   rtc_ms++;
+   ```
+   ![系统节拍计数](readme/pngs/系统节拍ms.png)
 #### 添加自己的命令
 命令的实现是由FreeRTOS的CLI组件完成的
 1. 添加命令回调函数声明，==注意函数需参数与给出实例完全相同==
