@@ -42,6 +42,14 @@ void start_task_init(void)
 static void start_task(void * pvparameters)
 {
     /*获取系统初始时间*/
+    rtc_time.Hours = 0;
+    rtc_time.Minutes = 0;
+    rtc_time.Seconds = 0;
+    rtc_date.Month = 11;
+    rtc_date.Date = 13;
+    rtc_date.Year = 24;
+    HAL_RTC_SetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
+    HAL_RTC_SetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
     HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
     HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
     log_i("系统开机成功 \r\n");
