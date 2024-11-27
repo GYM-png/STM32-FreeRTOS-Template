@@ -10,6 +10,7 @@
 #include "event_groups.h"
 #include "elog.h"
 #include "cmd.h"
+#include "cm_backtrace.h"
 
 void debug_init(void);
 

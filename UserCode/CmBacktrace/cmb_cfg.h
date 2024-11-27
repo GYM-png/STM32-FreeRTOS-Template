@@ -30,7 +30,7 @@
 #define _CMB_CFG_H_
 
 /* print line, must config by user */
-#define cmb_println(...)               printf( __VA_ARGS__)
+#define cmb_println(...)               uart_println_fast(&DEBUG_UART, __VA_ARGS__)
 /* enable OS platform */
 #define CMB_USING_OS_PLATFORM
 /* OS platform type, must config when CMB_USING_OS_PLATFORM is enable */

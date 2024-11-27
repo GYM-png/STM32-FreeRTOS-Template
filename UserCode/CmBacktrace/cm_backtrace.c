@@ -30,7 +30,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
-
+#include "myusart.h"
 
 #if __STDC_VERSION__ < 199901L
     #error "must be C99 or higher. try to add '-std=c99' to compile parameters"
@@ -658,5 +658,4 @@ void cm_backtrace_fault(uint32_t fault_handler_lr, uint32_t fault_handler_sp) {
 #endif
 
     print_call_stack(stack_pointer);
-    cmb_fault_end();
 }

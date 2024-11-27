@@ -1,11 +1,3 @@
-/*
- * @Author: GYM-png 480609450@qq.com
- * @Date: 2024-10-13 00:22:43
- * @LastEditors: GYM-png 480609450@qq.com
- * @LastEditTime: 2024-10-25 21:53:11
- * @FilePath: \MDK-ARMd:\warehouse\CmdDebug\CmdDebug\UserCode\global\global.c
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 #include "global.h"
 #include "system.h"
 
@@ -30,6 +22,7 @@ void start_task(void *pvparameters);
 
 void start_task_init(void)
 {
+    cm_backtrace_init("CmBacktrace", "MC 2.0", "TestVersion 2.1");
     xTaskCreate((TaskFunction_t )start_task,    //任务函数
                 (const char *   )"start_task",   //任务名称
                 (uint16_t       )START_TASK_SIZE, //任务堆栈大小
@@ -38,7 +31,17 @@ void start_task_init(void)
                 (TaskHandle_t * )&START_TASK_Handler); //任务句句柄
 }
 
+void fault_test_by_div0(void) {
+    volatile int * SCB_CCR = (volatile int *) 0xE000ED14; // SCB->CCR
+    int x, y, z;
 
+    *SCB_CCR |= (1 << 4); /* bit4: DIV_0_TRP. */
+
+    x = 10;
+    y = 0;
+    z = x / y;
+    printf("z:%d\n", z);
+}
 static void start_task(void * pvparameters)
 {
     /*获取系统初始时间*/
@@ -53,7 +56,6 @@ static void start_task(void * pvparameters)
     HAL_RTC_GetTime(&hrtc, &rtc_time, RTC_FORMAT_BCD);
     HAL_RTC_GetDate(&hrtc, &rtc_date, RTC_FORMAT_BCD);
     log_i("系统开机成功 \r\n");
-
     for(;;)
     {
         if(rtc_ms >= 1000)
@@ -71,11 +73,7 @@ static void start_task(void * pvparameters)
             rtc_time.Minutes = 0;
             rtc_time.Hours++;
         }
-
-        // log_i("你好\r\n");
-        // log_w("你好\r\n");
-        // log_e("你好\r\n");
-        vTaskDelay(1002);
+        vTaskDelay(800);
     }
 }
 
