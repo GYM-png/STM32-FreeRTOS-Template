@@ -1,15 +1,13 @@
 /**
- * ´ËÎÄ¼şÊÇÎªÁË×öCmBacktrace¶Ô±¾¹¤³ÌµÄÊÊÅä
+ * æ­¤æ–‡ä»¶æ˜¯ä¸ºäº†åšCmBacktraceå¯¹æœ¬å·¥ç¨‹çš„é€‚é…
  */
 #include "cmb_support.h"
-#include "elog_file.h"
-#include "sys.h"
-#include "delay.h"
-#include "malloc.h"
+#include "system.h"
+#include "myusart.h"
 #include <stdio.h>
 #include <stdarg.h>
 
-uint8_t fault_flag = 0;//±ê¼ÇÊÇ·ñµÚ´¥·¢Òì³£
+uint8_t fault_flag = 0;//æ ‡è®°æ˜¯å¦ç¬¬è§¦å‘å¼‚å¸¸
 static char * log_buffer = NULL;
 static uint32_t log_length = 0;
 
@@ -18,39 +16,39 @@ static uint32_t log_length = 0;
 #define OUT_BUFFER_SIZE 256
 
 /**
- * @brief cmbÊ¹ÓÃµÄ´òÓ¡Êä³ö²¢ÇÒ±£´æÈÕÖ¾µ½log_buffer
+ * @brief cmbä½¿ç”¨çš„æ‰“å°è¾“å‡ºå¹¶ä¸”ä¿å­˜æ—¥å¿—åˆ°log_buffer
  * @param format 
  * @param  
  */
 void cmb_print(const char *format, ...)
 {
-    static char * output_buffer = NULL;
-    if (fault_flag == 0)//µÚÒ»´Îµ÷ÓÃ ÉêÇëÄÚ´æ
-    {
-       log_buffer = mymalloc(SRAMIN, LOG_BUFFER_SIZE);
-       output_buffer = mymalloc(SRAMIN, OUT_BUFFER_SIZE);
-       fault_flag = 1; 
-    }
-    //Ğ´Èëoutput_buffer
-    va_list args;
-    va_start(args, format);
-    vsprintf(output_buffer, format, args);
-    va_end(args);
+//    static char * output_buffer = NULL;
+//    if (fault_flag == 0)//ç¬¬ä¸€æ¬¡è°ƒç”¨ ç”³è¯·å†…å­˜
+//    {
+//       log_buffer = mymalloc(SRAMIN, LOG_BUFFER_SIZE);
+//       output_buffer = mymalloc(SRAMIN, OUT_BUFFER_SIZE);
+//       fault_flag = 1; 
+//    }
+//    //å†™å…¥output_buffer
+//    va_list args;
+//    va_start(args, format);
+//    vsprintf(output_buffer, format, args);
+//    va_end(args);
 
-    //Êä³öºÍ±£´ælog
-    printf("%s\r\n", output_buffer);
-    log_length += sprintf(log_buffer + log_length, "%s\r\n", output_buffer);
-    mymemset(output_buffer, 0, OUT_BUFFER_SIZE);
+//    //è¾“å‡ºå’Œä¿å­˜log
+//    printf("%s\r\n", output_buffer);
+//    log_length += sprintf(log_buffer + log_length, "%s\r\n", output_buffer);
+//    mymemset(output_buffer, 0, OUT_BUFFER_SIZE);
 }
 
 /**
- * @brief cm_backtrace_fault º¯Êı×îºóµ÷ÓÃ
+ * @brief cm_backtrace_fault å‡½æ•°æœ€åè°ƒç”¨
  * @param  
  */
 void cmb_fault_end(void)
 {
-    elog_file_write(log_buffer, log_length);
-	printf("Ó²¼ş¹ÊÕÏ£¡£¡£¡£¡£¡£¡£¡ÖØÆô£¡£¡£¡£¡");
-	delay_xms(5000);
-	Sys_Soft_Reset(LOG_TAG);
+//  elog_file_write(log_buffer, log_length);
+//	printf("ç¡¬ä»¶æ•…éšœï¼ï¼ï¼ï¼ï¼ï¼ï¼é‡å¯ï¼ï¼ï¼ï¼");
+//	delay_xms(5000);
+//	Sys_Soft_Reset(LOG_TAG);
 }

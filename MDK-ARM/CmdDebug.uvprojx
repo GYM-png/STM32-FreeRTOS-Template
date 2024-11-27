@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H723xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../USB_DEVICE/App;../USB_DEVICE/Target;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../UserCode/Cmd;../UserCode/Usart;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../UserCode/System;..\UserCode\FreeRTOS_CLI;..\UserCode\EasyLogger</IncludePath>
+              <IncludePath>../Core/Inc;../USB_DEVICE/App;../USB_DEVICE/Target;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../UserCode/Cmd;../UserCode/Usart;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../UserCode/System;..\UserCode\FreeRTOS_CLI;..\UserCode\EasyLogger;..\UserCode\CmBacktrace;..\UserCode\CmBacktrace\Languages\en-US</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1806,6 +1806,26 @@
               <FileName>elog_utils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserCode\EasyLogger\elog_utils.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CmbackTrace</GroupName>
+          <Files>
+            <File>
+              <FileName>cm_backtrace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserCode\CmBacktrace\cm_backtrace.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmb_support.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserCode\CmBacktrace\cmb_support.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmb_fault.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\UserCode\CmBacktrace\fault_handler\keil\cmb_fault.S</FilePath>
             </File>
           </Files>
         </Group>

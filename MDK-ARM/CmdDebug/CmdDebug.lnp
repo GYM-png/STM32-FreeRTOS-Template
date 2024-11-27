@@ -64,6 +64,9 @@
 "cmddebug\elog.o"
 "cmddebug\elog_port.o"
 "cmddebug\elog_utils.o"
+"cmddebug\cm_backtrace.o"
+"cmddebug\cmb_support.o"
+"cmddebug\cmb_fault.o"
 --library_type=microlib --strict --scatter "CmdDebug\CmdDebug.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
