@@ -25,6 +25,7 @@ extern DMA_HandleTypeDef DEBUG_UART_DMA_RX;
  */
 void debug_init(void)
 {
+    vTraceEnable(TRC_INIT);
     uart_dma_init(&debug_uart, &DEBUG_UART, &DEBUG_UART_DMA_RX);
     vRegisterSampleCLICommands();
     cmd_init();

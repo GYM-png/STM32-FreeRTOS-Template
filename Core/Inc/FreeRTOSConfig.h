@@ -137,6 +137,7 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 #define configCOMMAND_INT_MAX_OUTPUT_SIZE 1024
+#include "trcRecorder.h"
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */
 
